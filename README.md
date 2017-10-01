@@ -1,3 +1,5 @@
+![Travis](https://travis-ci.org/hntd187/spotify.svg?branch=master "Travis")
+
 A Scala library for the Spotify API. The documentation on the Spotify API can be found [here](https://developer.spotify.com/web-api/). It currently
 supports most features surrounding artists, tracks, and albums. Currently no user support is implemented. 
 
