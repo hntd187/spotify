@@ -30,6 +30,11 @@ class ArtistSpec extends UnitSpec {
 
       aa.items.head.name shouldBe "Climate Change"
       aa.items.last.name shouldBe "Pitbull Starring In Rebelution"
+
+      // How many albums does pitbull have??
+      val allAlbums = spotify.getArtistAlbums(id = "0TnOYISbd1XYRBk9myaseg", limit = 50)
+      val resp      = await(allAlbums())
+      resp.items should have length 50
     }
 
     it("Should get some sweet EDM artists") {
