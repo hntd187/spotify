@@ -1,15 +1,15 @@
 A Scala library for the Spotify API. The documentation on the Spotify API can be found [here](https://developer.spotify.com/web-api/). It currently
 supports most features surrounding artists, tracks, and albums. Currently no user support is implemented. 
 
-#####Adding to project
+##### Adding to project
 `libraryDependencies += "io.scarman" %% "spotify-api" % "0.1"`
 
-#####Using the Library
+##### Using the Library
 There are 2 ways to make use of this library and there are some important things to keep in mind when using this library.
 The packages of this library are separated into request and response. Not surprisingly these are for the request portion
 and response portion of the API. It's important to understand this so you use the right classes.
 
-#####First use
+##### First use
 ```scala
 import scala.concurrent.Future
 import io.scarman.spotify._
