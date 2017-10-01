@@ -1,4 +1,4 @@
-![Travis](https://travis-ci.org/hntd187/spotify.svg?branch=master "Travis")
+![Travis](https://travis-ci.org/hntd187/spotify.svg?branch=master "Travis") [![Coverage Status](https://coveralls.io/repos/github/hntd187/spotify/badge.svg?branch=master)](https://coveralls.io/github/hntd187/spotify?branch=master)
 
 A Scala library for the Spotify API. The documentation on the Spotify API can be found [here](https://developer.spotify.com/web-api/). It currently
 supports most features surrounding artists, tracks, and albums. Currently no user support is implemented. 
