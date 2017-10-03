@@ -4,7 +4,9 @@ organization := "io.scarman"
 
 scalaVersion := "2.12.3"
 
-licenses += ("Apache 2", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+
+homepage := Some(url("https://www.github.com/hntd187/spotify"))
 
 bintrayPackageLabels := Seq("spotify", "music")
 
