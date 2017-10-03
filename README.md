@@ -4,7 +4,7 @@ A Scala library for the Spotify API. The documentation on the Spotify API can be
 supports most features surrounding artists, tracks, and albums. Currently no user support is implemented. 
 
 ##### Adding to project
-`libraryDependencies += "io.scarman" %% "spotify-api" % "0.1"`
+`libraryDependencies += "io.scarman" %% "spotify-api" % "0.1.0"`
 
 ##### Using the Library
 There are 2 ways to make use of this library and there are some important things to keep in mind when using this library.
