@@ -3,3 +3,4 @@ script: "sbt clean coverage test"
 after_success: "sbt coverageReport coveralls"
 scala:
    - 2.12.3
+   - 2.11.11
