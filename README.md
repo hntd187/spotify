@@ -24,10 +24,8 @@ val appSecret = ""
 
 val spotify = Spotify(appId, appSecret)
 
-// These are the same thing.
 val artistId = ""
 val artist: Artist = spotify.getArtist(artistId)
-
 val response: Future[resp.Artist] = artist()
 ```
 
@@ -44,7 +42,6 @@ val appSecret = ""
 
 implicit val spotify = Spotify(appId, appSecret)
 
-// These are the same thing.
 val artistId = ""
 val artist: Artist = Artist(artistId)
 val response: Future[resp.Artist] = artist()
