@@ -12,6 +12,8 @@ The packages of this library are separated into request and response. Not surpri
 and response portion of the API. It's important to understand this so you use the right classes.
 
 ##### First use
+The first way uses the `Spotify` object directly to create requests.
+
 ```scala
 import scala.concurrent.Future
 import io.scarman.spotify._
@@ -25,12 +27,30 @@ val spotify = Spotify(appId, appSecret)
 // These are the same thing.
 val artistId = ""
 val artist: Artist = spotify.getArtist(artistId)
-val artist2: Artist = Artist(artistId)
 
 val response: Future[resp.Artist] = artist()
 ```
 
-In this example, we create the initial entrance point via `Spotify` and then create a request for an Artist. The
+##### Second Way
+The second way uses the Spotify object implicitly and creates the case classes directly.
+
+```scala
+import scala.concurrent.Future
+import io.scarman.spotify._
+import io.scarman.spotify.{response => resp}
+
+val appId = ""
+val appSecret = ""
+
+implicit val spotify = Spotify(appId, appSecret)
+
+// These are the same thing.
+val artistId = ""
+val artist: Artist = Artist(artistId)
+val response: Future[resp.Artist] = artist()
+```
+
+In these examples, we create the initial entrance point via `Spotify` and then create a request for an Artist. The
 response from this request would be the serialized result of the Future. If you've used dispatch before this should look
 familiar to you as the request isn't actually made until the `.apply()`  method is called on the request object. It's the
 users responsibility to deal with the future at this point, but some of the response objects have methods on them which
@@ -40,4 +60,12 @@ make subsequent requests using information you've already provided much easier.
 import io.scarman.spotify._
 val artist = Artist("id")
 val albums = artist.albums()
+
+val track = Track("id")
+val features = track.getAudioFeatures()
 ```
+
+Currently most of the non-user related API requests are implemented. This includes artists, albums, tracks. Down the road I plan to finish off the rest of the API, but I'm not sure how the user calls will fit in down the road. I'm open to suggestions on them.
+
+#### Contact
+Stephen Carman <shcarman@gmail.com>
