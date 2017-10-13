@@ -41,6 +41,7 @@ class AudioSpec extends UnitSpec {
 
       resp.averageBarLength should be(1.841694166666667 +- 0.01)
       resp.averageBarConfidence should be(0.4981574074074074 +- 1.0)
+      resp.bars.head.getDuration shouldBe a[Duration]
     }
   }
 }

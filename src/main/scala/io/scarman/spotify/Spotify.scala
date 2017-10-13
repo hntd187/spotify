@@ -28,9 +28,9 @@ class Spotify(id: String, secret: String) extends AuthToken {
   def getArtist(id: String, market: String = "ES"): Artist = Artist(id, market)(this)
   def getAlbum(id: String, market: String = "ES"): Album   = Album(id, market)(this)
   def getTrack(id: String, market: String = "ES"): Track   = Track(id, market)(this)
-  def getArtists(ids: String*): Artists                    = Artists(ids.toList)(this)
-  def getAlbums(ids: String*): Albums                      = Albums(ids.toList)(this)
-  def getTracks(ids: String*): Tracks                      = Tracks(ids.toList)(this)
+  def getArtists(ids: String*): Artists                    = getArtists(ids.toList)
+  def getAlbums(ids: String*): Albums                      = getAlbums(ids.toList)
+  def getTracks(ids: String*): Tracks                      = getTracks(ids.toList)
   def getAudioFeatures(id: String): AudioFeatures          = AudioFeatures(id)(this)
   def getAudioAnalysis(id: String): AudioAnalysis          = AudioAnalysis(id)(this)
 

@@ -2,6 +2,8 @@ package io.scarman.spotify.request
 
 import java.io.File
 
+import io.scarman.spotify.http.{AlreadyExists, Downloaded}
+
 class AlbumSpec extends UnitSpec {
 
   import UnitSpec._
@@ -12,9 +14,18 @@ class AlbumSpec extends UnitSpec {
     it("Should get a sweet Pitbull album") {
       val album  = spotify.getAlbum(id = sweet_pitbull_album)
       val result = await(album())
-      val cover  = result.images.head.download(s"$testPath/cover.png", Some("3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"))
+      val images = result.images.head
+      val cover  = images.download(s"$testPath/cover.png")
 
-      await(cover).value shouldBe "3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"
+      val coverResult = await(cover)
+      coverResult.checksum.get shouldBe "3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"
+      coverResult.result shouldBe Downloaded
+
+      val coverAgain  = images.download(s"$testPath/cover.png", Some("3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"))
+      val coverExists = await(coverAgain)
+      coverExists.checksum.value shouldBe "3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"
+      coverExists.result shouldBe AlreadyExists
+
       result.name shouldBe "Global Warming"
       result.artists.head.name shouldBe "Pitbull"
 
@@ -45,6 +56,8 @@ class AlbumSpec extends UnitSpec {
       secondPage.items should have length 9
       tracks.getPageNumber shouldBe 2
 
+      tracks.hasNext shouldBe false
+      await(tracks.nextPage()).isEmpty shouldBe true
       tracks.hasPrevious shouldBe true
       val previousWorks = await(tracks.previousPage()).get
       tracks.getPageNumber shouldBe 1
@@ -53,7 +66,7 @@ class AlbumSpec extends UnitSpec {
     }
 
     it("Should get some sweet daft punk albums") {
-      val albums = spotify.getAlbums(ids = List("382ObEPsp2rxGrnsizN5TX", "1A2GTWGtFfWp7KSQTwWOyo"))
+      val albums = spotify.getAlbums("382ObEPsp2rxGrnsizN5TX", "1A2GTWGtFfWp7KSQTwWOyo")
       val result = await(albums())
 
       val artists = for {

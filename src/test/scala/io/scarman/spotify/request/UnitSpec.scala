@@ -14,7 +14,6 @@ object UnitSpec {
 
   val sweet_pitbull_album: String = "4aawyAB9vmqN3uQ7FjRGTy"
   val trackId: String             = "1zHlj4dQ8ZAtrayhuDDmkY"
-  val trackIds: List[String]      = List("6OmhkSOpvYBokMKQxpIGx2", "1zHlj4dQ8ZAtrayhuDDmkY")
 }
 
 trait UnitSpec extends FunSpec with Matchers with OptionValues with BeforeAndAfterAll {

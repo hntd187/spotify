@@ -17,9 +17,9 @@ object Checksum {
 
   def verifyChecksum(filePath: Path, sum: String): Boolean = {
     if (filePath.toFile.exists()) {
-      val fileSha1: String = Files.readAllBytes(filePath).sha1.string
+      val fileSha1: String = Files.readAllBytes(filePath).sha1
       logger.debug(s"$sum == $fileSha1 (${fileSha1 == sum})")
-      !(fileSha1 == sum)
+      fileSha1 == sum
     } else {
       true
     }
@@ -33,7 +33,7 @@ object Checksum {
       sha.foreach { b =>
         formatter.append(f"$b%02x")
       }
-      logger.info(s"SHA1 sum is ${formatter.result()}")
+      logger.debug(s"SHA1 sum is ${formatter.result()}")
       formatter.result()
     }
     def sha1: Array[Byte] = Checksum.SHA1Sum(sha)

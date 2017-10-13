@@ -35,7 +35,7 @@ class TrackSpec extends UnitSpec {
     }
 
     it("Should get multiple hot fire tracks from Pitbull") {
-      val tracks = spotify.getTracks(trackIds)
+      val tracks = spotify.getTracks("6OmhkSOpvYBokMKQxpIGx2", "1zHlj4dQ8ZAtrayhuDDmkY")
       val result = await(tracks())
 
       result.tracks should have length 2
@@ -43,5 +43,4 @@ class TrackSpec extends UnitSpec {
       result.tracks.last.name shouldBe "Timber"
     }
   }
-
 }

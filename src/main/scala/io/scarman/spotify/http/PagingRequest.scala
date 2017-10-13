@@ -12,31 +12,26 @@ private[spotify] trait PagingRequest[R <: Paging[_]] extends LastResponse[R] { h
   def getPageNumber: Int = pageNumber
 
   def hasNext: Boolean = {
-    lastResponse match {
-      case Some(p) => p.next.nonEmpty
-      case None    => false
-    }
+    lastResponse.exists(_.next.nonEmpty)
   }
 
   def hasPrevious: Boolean = {
-    lastResponse match {
-      case Some(p) => p.previous.nonEmpty
-      case None    => false
-    }
+    lastResponse.exists(_.previous.nonEmpty)
   }
 
-  private def getPage(page: Option[String]): Future[Option[R]] = {
-    page match {
-      case Some(u) => get(url(u)).map(Some(_))
-      case None    => Future.successful(None)
-    }
+  private def getPage(page: String): Future[Option[R]] = {
+    get(url(page)).map(Some(_))
   }
 
   def nextPage(): Future[Option[R]] = {
     lastResponse match {
       case Some(p) =>
-        pageNumber += 1
-        getPage(p.next)
+        p.next.map { p =>
+          pageNumber += 1
+          getPage(p)
+        }.getOrElse {
+          Future.successful(None)
+        }
       case None => Future.successful(None)
     }
   }
@@ -45,7 +40,7 @@ private[spotify] trait PagingRequest[R <: Paging[_]] extends LastResponse[R] { h
     lastResponse match {
       case Some(p) =>
         pageNumber -= 1
-        getPage(p.previous)
+        p.previous.map(getPage).getOrElse(Future.successful(None))
       case None => Future.successful(None)
     }
   }
