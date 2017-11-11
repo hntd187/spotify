@@ -1,9 +1,11 @@
 package io.scarman.spotify.util
 
-import java.nio.file.{Files, Path}
+import java.nio.file.Files
+import java.nio.file.Path
 import java.security.MessageDigest
 
-import org.slf4j.{Logger, LoggerFactory}
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 /**
   * Some utilities to assist in calculating the checksums of album covers downloaded

@@ -1,5 +1,6 @@
 package io.scarman.spotify.request
 
+import java.io.File
 import scala.concurrent.duration._
 import scala.concurrent.{Await, Awaitable}
 
@@ -21,5 +22,5 @@ trait UnitSpec extends FunSpec with Matchers with OptionValues with BeforeAndAft
   def await[T](f: Awaitable[T]): T = Await.result(f, 1.minute)
 
   val testPath = System.getProperty("java.io.tmpdir")
-
+  new File(s"$testPath/cover.png").deleteOnExit()
 }

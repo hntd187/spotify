@@ -3,7 +3,8 @@ package io.scarman.spotify.request
 import dispatch.Req
 
 import io.scarman.spotify.Spotify
-import io.scarman.spotify.http.{HttpRequest, PagingRequest}
+import io.scarman.spotify.http.HttpRequest
+import io.scarman.spotify.http.PagingRequest
 
 /**
   * The albums belonging to an artist.

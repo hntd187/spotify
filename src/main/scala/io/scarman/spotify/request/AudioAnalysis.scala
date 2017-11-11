@@ -1,7 +1,8 @@
 package io.scarman.spotify.request
 
-import io.scarman.spotify.{Spotify, response}
 import io.scarman.spotify.http.HttpRequest
+import io.scarman.spotify.Spotify
+import io.scarman.spotify.response
 
 /**
   * This queries for the audio analysis of a track. Beware, this usually returns a lot of data.

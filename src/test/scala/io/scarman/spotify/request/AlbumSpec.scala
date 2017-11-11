@@ -8,8 +8,6 @@ class AlbumSpec extends UnitSpec {
 
   import UnitSpec._
 
-  new File(s"$testPath/cover.png").deleteOnExit()
-
   describe("Tests for Album Endpoints") {
     it("Should get a sweet Pitbull album") {
       val album  = spotify.getAlbum(id = sweet_pitbull_album)

@@ -20,7 +20,7 @@ class AudioSpec extends UnitSpec {
       result.acousticness shouldBe 0.0362
       result.instrumentalness shouldBe 0
       result.liveness shouldBe 0.138
-      result.valence shouldBe 0.818
+      result.valence shouldBe (0.818 +- 0.2)
       result.tempo shouldBe 129.972
       result.duration_ms shouldBe 204053
       result.getDuration shouldBe a[Duration]

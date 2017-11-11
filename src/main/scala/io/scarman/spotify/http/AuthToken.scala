@@ -5,8 +5,10 @@ import scala.concurrent.ExecutionContext.Implicits.global
 
 import dispatch._
 import dispatch.as.json4s._
-import org.json4s.{DefaultFormats, JValue}
-import org.slf4j.{Logger, LoggerFactory}
+import org.json4s.DefaultFormats
+import org.json4s.JValue
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import io.scarman.spotify.request.Endpoints
 import io.scarman.spotify.response.AccessToken

@@ -6,11 +6,15 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import dispatch._
 import org.asynchttpclient.Response
 import org.json4s.jackson.JsonMethods._
-import org.json4s.{DefaultFormats, Formats, StringInput}
-import org.slf4j.{Logger, LoggerFactory}
+import org.json4s.DefaultFormats
+import org.json4s.Formats
+import org.json4s.StringInput
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
 import io.scarman.spotify.Spotify
-import io.scarman.spotify.response.{Error, ErrorCase}
+import io.scarman.spotify.response.Error
+import io.scarman.spotify.response.ErrorCase
 
 @implicitNotFound("Cannot find Spotify client, did you create one?")
 private[spotify] abstract class HttpRequest[R](implicit mf: Manifest[R], spotify: Spotify) extends RequestJson with LastResponse[R] {

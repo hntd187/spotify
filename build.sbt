@@ -2,7 +2,7 @@ name := "spotify-api"
 
 organization := "io.scarman"
 
-scalaVersion := "2.12.3"
+scalaVersion := "2.12.4"
 
 licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
 
@@ -10,7 +10,9 @@ homepage := Some(url("https://www.github.com/hntd187/spotify"))
 
 bintrayPackageLabels := Seq("spotify", "music")
 
-crossScalaVersions := Seq("2.11.11", "2.12.3")
+crossScalaVersions := Seq("2.11.11", "2.12.4")
+
+scalafmtOnCompile in ThisBuild := true
 
 scalacOptions ++= Seq(
   "-feature",
@@ -34,6 +36,6 @@ libraryDependencies ++= Seq(
   "org.apache.logging.log4j" % "log4j-core"               % log4jVersion,
   "org.apache.logging.log4j" % "log4j-api"                % log4jVersion,
   "org.apache.logging.log4j" % "log4j-slf4j-impl"         % log4jVersion,
-  "org.scalatest"            %% "scalatest"               % scalatestVersion % Test,
-  "io.netty"                 % "netty-handler"            % nettyVersion
+  "io.netty"                 % "netty-handler"            % nettyVersion,
+  "org.scalatest"            %% "scalatest"               % scalatestVersion % Test
 )
