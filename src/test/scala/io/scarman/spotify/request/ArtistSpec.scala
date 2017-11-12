@@ -12,6 +12,16 @@ class ArtistSpec extends UnitSpec {
       response.name shouldBe "Pitbull"
       response.`type` shouldBe "artist"
       response.popularity.get shouldBe (89 +- 5)
+
+      val topTracks = await(request.topTracks()())
+
+      topTracks().head.name shouldBe "Hey Ma (with Pitbull & J Balvin feat. Camila Cabello) - Spanish Version"
+      topTracks().last.name shouldBe "Como Yo Le Doy - Spanglish Version"
+
+      val relatedDudes = await(request.relatedArtists()())
+
+      relatedDudes().head.name shouldBe "Flo Rida"
+      relatedDudes().last.name shouldBe "Don Omar"
     }
 
     it("Should get Pitbull's platinum albums") {
@@ -39,9 +49,9 @@ class ArtistSpec extends UnitSpec {
       val request  = spotify.getArtists("2CIMQHirSU0MQqyYHq0eOx", "57dN52uHvrHOxijzpIgu3E", "1vCWHaC5f2uS3yhpwWbIA6")
       val response = await(request())
 
-      response.artists.head.name shouldBe "deadmau5"
-      response.artists(1).name shouldBe "Ratatat"
-      response.artists.last.name shouldBe "Avicii"
+      response().head.name shouldBe "deadmau5"
+      response(1).name shouldBe "Ratatat"
+      response().last.name shouldBe "Avicii"
     }
   }
 }

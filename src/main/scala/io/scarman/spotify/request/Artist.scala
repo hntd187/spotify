@@ -17,8 +17,16 @@ import io.scarman.spotify.response
 case class Artist(id: String, market: String = "ES")(implicit spotify: Spotify) extends HttpRequest[response.Artist] {
   lazy protected val request: Req = Endpoints.Artists / id
 
-  def albums(types: BaseAlbumType*): ArtistAlbums = albums(types.toList)
+  def albums(t: BaseAlbumType, types: BaseAlbumType*): ArtistAlbums = albums(types.toList :+ t)
   def albums(types: List[BaseAlbumType] = AlbumTypes.default, limit: Int = 10, offset: Int = 0): ArtistAlbums = {
     ArtistAlbums(id, market, types, limit, offset)
+  }
+
+  def topTracks(): TopTracks = {
+    TopTracks(id, market)
+  }
+
+  def relatedArtists(): RelatedArtists = {
+    RelatedArtists(id)
   }
 }
