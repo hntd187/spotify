@@ -2,6 +2,7 @@ package io.scarman.spotify.request
 
 import io.scarman.spotify.http.HttpRequest
 import io.scarman.spotify._
+import monix.execution.Scheduler
 
 /**
   * Get more than one artist at once.
@@ -12,7 +13,7 @@ import io.scarman.spotify._
   * @param offset
   * @param spotify
   */
-case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify) extends HttpRequest[response.Artists] {
+case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify, scheduler: Scheduler) extends HttpRequest[response.Artists] {
 
   lazy protected val request = base
     .withPath(s"$AR/")

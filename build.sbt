@@ -1,10 +1,7 @@
-import org.scalajs.jsenv.nodejs.NodeJSEnv
 import sbtcrossproject.{CrossType, crossProject}
 
 name := "spotify-api"
 
-lazy val dispatchVersion  = "0.13.3"
-lazy val log4jVersion     = "2.10.0"
 lazy val scalatestVersion = "3.0.5"
 
 lazy val common = Seq(
@@ -13,6 +10,7 @@ lazy val common = Seq(
   scalaVersion := "2.12.4",
   scalafmtOnCompile in ThisBuild := true,
   scalafmtVersion in ThisBuild := "1.4.0",
+  parallelExecution in Test := true,
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://www.github.com/hntd187/spotify")),
   bintrayPackageLabels := Seq("spotify", "music"),
@@ -51,17 +49,8 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
       "org.scalatest" %%% "scalatest"     % scalatestVersion % Test
     )
   )
-  //.jvmSettings()
-  .jsSettings(
-    parallelExecution in Test := false,
-    jsEnv := new org.scalajs.jsenv.nodejs.NodeJSEnv(NodeJSEnv.Config().withExecutable("./node/bin/node"))
-    //("C:\\Program Files\\nodejs\\node")
-//    libraryDependencies ++= Seq(
-//      "org.scala-js"      %%% "scalajs-java-time"  % "0.2.3",
-//      "io.github.cquiroz" %%% "scala-java-locales" % "0.5.5-cldr31"
-//    ),
-  )
+  .jvmSettings()
+  .jsSettings()
 
 lazy val coreJvm = core.jvm
 lazy val coreJs  = core.js
-//lazy val spotifyNative = spotify.native

@@ -7,51 +7,56 @@ class ArtistSpec extends UnitSpec {
   describe("Tests for Artist Endpoints") {
     it("Should get Pitbull's sweet music") {
       val request  = spotify.getArtist(id = "0TnOYISbd1XYRBk9myaseg")
-      val response = await(request())
+      val response = request()
+      response.map { r =>
+        r.name shouldBe "Pitbull"
+        r.`type` shouldBe "artist"
+        r.popularity.get shouldBe (89 +- 5)
+      }
+      val topTracks = request.topTracks()
 
-      response.name shouldBe "Pitbull"
-      response.`type` shouldBe "artist"
-      response.popularity.get shouldBe (89 +- 5)
-      val topTracks = await(request.topTracks().apply())
-
-      topTracks().head.name shouldBe "Time of Our Lives"
-      topTracks().last.name shouldBe "International Love"
+      topTracks().map(_().head.name shouldBe "Time of Our Lives")
+      topTracks().map(_().last.name shouldBe "International Love")
 
       val related      = request.relatedArtists()
-      val relatedDudes = await(related())
+      val relatedDudes = related()
 
-      relatedDudes().head.name shouldBe "Flo Rida"
-      relatedDudes().last.name shouldBe "The Black Eyed Peas"
+      relatedDudes.map(_().head.name shouldBe "Flo Rida")
+      relatedDudes.map(_().last.name shouldBe "The Black Eyed Peas")
     }
 
     it("Should get Pitbull's platinum albums") {
       val request  = spotify.getArtist(id = "0TnOYISbd1XYRBk9myaseg").albums(fullalbum)
-      val albums   = await(request())
-      val nextPage = await(request.nextPage())
+      val albums   = request()
+      val nextPage = request.nextPage()
 
-      albums.items.head.name shouldBe "Climate Change"
-      albums.items.last.name shouldBe "Pitbull Starring In Rebelution"
+      albums.map { a =>
+        a.items.head.name shouldBe "Climate Change"
+        a.items.last.name shouldBe "Pitbull Starring In Rebelution"
+      }
 
       val artistAlbums = spotify.getArtistAlbums(id = "0TnOYISbd1XYRBk9myaseg", albumType = List(fullalbum))
-      val aa           = await(artistAlbums())
-      val np           = await(artistAlbums.nextPage())
+      val aa           = artistAlbums()
+      val np           = artistAlbums.nextPage()
 
-      aa.items.head.name shouldBe "Climate Change"
-      aa.items.last.name shouldBe "Pitbull Starring In Rebelution"
+      aa.map { a =>
+        a.items.head.name shouldBe "Climate Change"
+        a.items.last.name shouldBe "Pitbull Starring In Rebelution"
+      }
 
       // How many albums does pitbull have??
       val allAlbums = spotify.getArtistAlbums(id = "0TnOYISbd1XYRBk9myaseg", limit = 50)
-      val resp      = await(allAlbums())
-      resp.items should have length 50
+      val resp      = allAlbums()
+      resp.map(_.items should have length 50)
     }
 
     it("Should get some sweet EDM artists") {
       val request  = spotify.getArtists("2CIMQHirSU0MQqyYHq0eOx", "57dN52uHvrHOxijzpIgu3E", "1vCWHaC5f2uS3yhpwWbIA6")
-      val response = await(request())
+      val response = request()
 
-      response().head.name shouldBe "deadmau5"
-      response(1).name shouldBe "Ratatat"
-      response().last.name shouldBe "Avicii"
+      response.map(_().head.name shouldBe "deadmau5")
+      response.map(_(1).name shouldBe "Ratatat")
+      response.map(_().last.name shouldBe "Avicii")
     }
   }
 }

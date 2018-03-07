@@ -1,6 +1,7 @@
 package io.scarman.spotify.http
 
 import java.util.Base64
+
 import scala.concurrent._
 import scala.util._
 
@@ -8,14 +9,15 @@ import fr.hmil.roshttp.body._
 import fr.hmil.roshttp.{Method, HttpRequest => HR}
 import io.circe.generic.auto._
 import io.circe.parser._
-import monix.execution.Scheduler.Implicits.global
-import scribe.{Level, Logger, Logging}
-
 import io.scarman.spotify.request.Endpoints
 import io.scarman.spotify.response.AccessToken
+import monix.execution.Scheduler
+import scribe.Logging
 
 private[spotify] trait AuthToken extends Logging {
-  Logger.update(getClass.getName)(_.clearHandlers().withHandler(minimumLevel = Level.Debug))
+
+  protected implicit val scheduler: Scheduler
+
   private val baseRequest = Endpoints.Token
     .withMethod(Method.POST)
     .withHeader("Content-Type", "application/x-www-form-urlencoded")
@@ -27,10 +29,7 @@ private[spotify] trait AuthToken extends Logging {
   }
 
   private def tokenRequest(req: HR): Future[String] = {
-    req.send().map { r =>
-      logger.info(s"Code: ${r.statusCode}")
-      r.body
-    }
+    req.send().map(_.body)
   }
 
   protected def getToken(id: String, secret: String): Future[AccessToken] = {
@@ -40,13 +39,9 @@ private[spotify] trait AuthToken extends Logging {
       .withBody(URLEncodedBody(baseBody))
 
     logger.info(s"Requesting token for $authHeader")
-    val req = tokenRequest(request).recover {
-      case t: Throwable => logger.info(s"${t.getMessage}"); throw t
-    }
-    logger.info("Got req back?")
-
+    val req = tokenRequest(request)
     req.map(s => decode[AccessToken](s)).map {
-      case Right(v) => logger.info(s"Decoded $v"); v
+      case Right(v) => v
       case Left(e)  => throw e
     }
   }

@@ -2,6 +2,7 @@ package io.scarman.spotify.request
 
 import io.scarman.spotify._
 import io.scarman.spotify.http.HttpRequest
+import monix.execution.Scheduler
 
 /**
   * A artist (such as Mr. Worldwide)
@@ -11,7 +12,7 @@ import io.scarman.spotify.http.HttpRequest
   * @param market
   * @param spotify
   */
-case class Artist(id: String, market: String = "ES")(implicit spotify: Spotify) extends HttpRequest[response.Artist] {
+case class Artist(id: String, market: String = "ES")(implicit spotify: Spotify, scheduler: Scheduler) extends HttpRequest[response.Artist] {
   lazy protected val request = base.withPath(s"$AR/$id")
 
   def albums(t: BaseAlbumType, types: BaseAlbumType*): ArtistAlbums = albums(types.toList :+ t)

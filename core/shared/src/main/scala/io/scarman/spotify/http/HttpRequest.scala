@@ -1,25 +1,25 @@
 package io.scarman.spotify.http
 
 import scala.annotation.implicitNotFound
-import scala.concurrent.Future
+import scala.concurrent.{ExecutionContext, Future}
 
 import fr.hmil.roshttp.response.SimpleHttpResponse
 import fr.hmil.roshttp.{HttpRequest => HR}
 import io.circe._
 import io.circe.generic.auto._
 import io.circe.parser._
-import monix.execution.Scheduler.Implicits.global
 import scribe.Logging
-
 import io.scarman.spotify._
 import io.scarman.spotify.response._
+import monix.execution.Scheduler
 
 @implicitNotFound("Cannot find Spotify client, did you create one?")
-private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Decoder[R])
+private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Decoder[R], scheduler: Scheduler)
     extends RequestJson
     with LastResponse[R]
     with Logging {
 
+  implicit private val ec: ExecutionContext = scheduler
   protected val request: HR
 
   def apply(): Future[R] = {

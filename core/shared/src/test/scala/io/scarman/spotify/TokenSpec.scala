@@ -12,16 +12,19 @@ class TokenSpec extends UnitSpec {
   describe("Test getting auth tokens") {
 
     it("Should get a valid token...") {
-      spotify.isExpired.futureValue shouldBe false
-      spotify.getToken.futureValue should not be empty
+      spotify.isExpired.map(_ shouldBe false)
+      spotify.getToken.map(_ should not be empty)
     }
     it("Should refresh the token...") {
-      val t        = spotify.getToken.futureValue
-      val bumToken = AccessToken(t, "", -1, None, None)
-      spotify.refreshToken(appId, appSecret, Future.successful(bumToken))
+      val t = spotify.getToken
 
-      spotify.isExpired.futureValue shouldBe false
-      spotify.getToken.futureValue should not be empty
+      t.flatMap { tok =>
+        val bumToken = AccessToken(tok, "", -1, None, None)
+        spotify.refreshToken(appId, appSecret, Future.successful(bumToken))
+      }
+
+      spotify.isExpired.map(_ shouldBe false)
+      spotify.getToken.map(_ should not be empty)
     }
   }
 }

@@ -2,6 +2,7 @@ package io.scarman.spotify.request
 
 import io.scarman.spotify.Spotify
 import io.scarman.spotify.http._
+import monix.execution.Scheduler
 
 /**
   * The tracks on an album.
@@ -13,7 +14,7 @@ import io.scarman.spotify.http._
   * @param offset
   * @param spotify
   */
-case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify)
+case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify, val scheduler: Scheduler)
     extends HttpRequest[TrackPage]
     with PagingRequest[TrackPage] {
 

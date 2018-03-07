@@ -7,7 +7,6 @@ import fr.hmil.roshttp.HttpRequest
 import fr.hmil.roshttp.Protocol.HTTPS
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
-
 import io.scarman.spotify.{response => r}
 
 package object request {

@@ -2,6 +2,7 @@ package io.scarman.spotify.request
 
 import io.scarman.spotify.http.HttpRequest
 import io.scarman.spotify._
+import monix.execution.Scheduler
 
 /**
   * A collection of albums.
@@ -13,7 +14,7 @@ import io.scarman.spotify._
   * @param offset
   * @param spotify
   */
-case class Albums(ids: List[String], market: String = "ES", limit: Int = 10, offset: Int = 0)(implicit spotify: Spotify)
+case class Albums(ids: List[String], market: String = "ES", limit: Int = 10, offset: Int = 0)(implicit spotify: Spotify, scheduler: Scheduler)
     extends HttpRequest[response.Albums] {
   lazy protected val request = base
     .withPath(s"$AB/")
