@@ -20,8 +20,7 @@ class TestHttpSpec extends UnitSpec {
 
       val sent = req.send()
       sent.map { r =>
-        println(s"${r.statusCode} - ${r.body}\n ${r.headers}")
-        assert(r.body == "{\"ip\":\"209.249.202.82\"}")
+        assert(r.body == "{\"ip\":\"73.13.171.142\"}")
         assert(r.statusCode == 200)
       }
     }

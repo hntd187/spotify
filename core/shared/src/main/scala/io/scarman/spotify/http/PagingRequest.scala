@@ -2,58 +2,21 @@ package io.scarman.spotify.http
 
 import scala.concurrent.Future
 
-import fr.hmil.roshttp.{HttpRequest => HR}
-import monix.execution.atomic.AtomicInt
-import io.scarman.spotify.response.Paging
-import monix.execution.Scheduler
+import io.scarman.spotify.request.ResultPage
 
-private[spotify] trait PagingRequest[R <: Paging[_]] extends LastResponse[R] { http: HttpRequest[R] =>
+trait PagingRequest[R <: ResultPage[_]] extends HttpRequest[R] {
 
-  protected implicit val scheduler: Scheduler
-  protected var pageNumber: AtomicInt = AtomicInt(1)
+  protected var page: Int
+  protected var current: Future[R]
 
-  def getPageNumber: Int = pageNumber.get
+  def pageNumber: Int = page
 
-  def hasNext: Boolean = {
-    synchronized {
-      lastResponse.toOption.exists(_.next.nonEmpty)
-    }
-  }
+  def nextPage(): Future[R]
 
-  def hasPrevious: Boolean = {
-    if (pageNumber() == 1) return false
-    synchronized {
-      lastResponse.toOption.exists(_.previous.nonEmpty)
-    }
-  }
+  def previousPage(): Future[R]
 
-  private def getPage(page: String): Future[Option[R]] = {
-    logger.info(s"Current Page: ${pageNumber()}")
-    get(HR(page)).map(Some(_))
-  }
+  def hasNext: Future[Boolean]
 
-  def nextPage(): Future[Option[R]] = {
-    lastResponse.toOption.map { r =>
-      r.next match {
-        case Some(s) =>
-          pageNumber.increment()
-          getPage(s)
-        case _ => Future.successful(None)
-      }
-    }.getOrElse(Future.successful(None))
-  }
-
-  def previousPage(): Future[Option[R]] = {
-
-    lastResponse.toOption.map { r =>
-      pageNumber.decrement()
-      r.previous match {
-        case Some(s) =>
-          pageNumber.decrement()
-          getPage(s)
-        case _ => Future.successful(None)
-      }
-    }.getOrElse(Future.successful(None))
-  }
+  def hasPrevious: Future[Boolean]
 
 }

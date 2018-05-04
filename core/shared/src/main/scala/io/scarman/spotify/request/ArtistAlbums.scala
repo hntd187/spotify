@@ -1,5 +1,9 @@
 package io.scarman.spotify.request
 
+import scala.concurrent.Future
+
+import io.circe.Decoder
+
 import io.scarman.spotify.Spotify
 import io.scarman.spotify.http._
 import monix.execution.Scheduler
@@ -19,9 +23,9 @@ import monix.execution.Scheduler
   * @param spotify
   */
 case class ArtistAlbums(id: String, market: String, types: List[BaseAlbumType] = AlbumTypes.default, limit: Int = 10, offset: Int = 0)(
-    implicit spotify: Spotify, val scheduler: Scheduler)
-    extends HttpRequest[AlbumPage]
-    with PagingRequest[AlbumPage] {
+    implicit spotify: Spotify,
+    val scheduler: Scheduler)
+    extends HttpRequest[AlbumPage] {
 
   lazy protected val request = base
     .withPath(s"$AR/$id/albums")
@@ -29,4 +33,5 @@ case class ArtistAlbums(id: String, market: String, types: List[BaseAlbumType] =
     .withQueryParameter("limit", limit.toString)
     .withQueryParameter("offset", offset.toString)
     .withQueryParameter("market", market)
+
 }

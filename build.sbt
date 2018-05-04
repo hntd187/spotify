@@ -42,10 +42,10 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
   .settings(
     libraryDependencies ++= Seq(
       "fr.hmil"       %%% "roshttp"       % "2.1.0",
-      "com.outr"      %%% "scribe"        % "2.2.0",
-      "io.circe"      %%% "circe-core"    % "0.9.1",
-      "io.circe"      %%% "circe-parser"  % "0.9.1",
-      "io.circe"      %%% "circe-generic" % "0.9.1",
+      "com.outr"      %%% "scribe"        % "2.3.0",
+      "io.circe"      %%% "circe-core"    % "0.9.2",
+      "io.circe"      %%% "circe-parser"  % "0.9.2",
+      "io.circe"      %%% "circe-generic" % "0.9.2",
       "org.scalatest" %%% "scalatest"     % scalatestVersion % Test
     )
   )

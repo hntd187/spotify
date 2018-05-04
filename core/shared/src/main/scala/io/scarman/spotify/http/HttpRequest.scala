@@ -29,6 +29,7 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Dec
 
   private def toJson(resp: SimpleHttpResponse): Either[ErrorCase, R] = {
     val body = resp.body
+    println(body)
     json = parse(body).toOption
     resp.statusCode match {
       case 200 =>
@@ -41,7 +42,7 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Dec
         json match {
           case Some(j) =>
             j.as[ErrorCase] match {
-              case Right(ec) => Left(ec)
+              case Right(ee) => Left(ee)
               case Left(df)  => throw df
             }
           case None => Left(ErrorCase(response.Error(resp.statusCode, "Empty, non 200 response returned")))
@@ -60,7 +61,6 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Dec
         data match {
           case Right(r) => r
           case Left(ErrorCase(response.Error(code, message))) =>
-            logger.info(resp.body)
             throw new RuntimeException(s"Error, Code: $code, Message: $message")
         }
       }
