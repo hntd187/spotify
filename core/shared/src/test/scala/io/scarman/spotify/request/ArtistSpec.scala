@@ -26,9 +26,9 @@ class ArtistSpec extends UnitSpec {
     }
 
     it("Should get Pitbull's platinum albums") {
-      val request  = spotify.getArtist(id = "0TnOYISbd1XYRBk9myaseg").albums(fullalbum)
-      val albums   = request()
-      val nextPage = request.nextPage()
+      val request = spotify.getArtist(id = "0TnOYISbd1XYRBk9myaseg").albums(fullalbum)
+      val albums  = request()
+//      val nextPage = request.nextPage()
 
       albums.map { a =>
         a.items.head.name shouldBe "Climate Change"
@@ -37,7 +37,7 @@ class ArtistSpec extends UnitSpec {
 
       val artistAlbums = spotify.getArtistAlbums(id = "0TnOYISbd1XYRBk9myaseg", albumType = List(fullalbum))
       val aa           = artistAlbums()
-      val np           = artistAlbums.nextPage()
+//      val np           = artistAlbums.nextPage()
 
       aa.map { a =>
         a.items.head.name shouldBe "Climate Change"

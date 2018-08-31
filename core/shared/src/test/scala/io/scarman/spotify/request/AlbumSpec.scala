@@ -9,20 +9,6 @@ class AlbumSpec extends UnitSpec {
       val album  = spotify.getAlbum(id = sweet_pitbull_album)
       val result = album()
 
-      /*
-      val images = i.images.head
-      val cover  = images.download(s"$testPath/cover.png")
-
-      val coverResult = cover()
-      coverResult.checksum.get shouldBe "3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"
-      coverResult.result shouldBe Downloaded
-
-      val coverAgain  = images.download(s"$testPath/cover.png", Some("3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"))
-      val coverExists = coverAgain.futureValue
-      coverExists.checksum.value shouldBe "3edb3f970f4a3af9ef922efd18cdb4dabaf85ced"
-      coverExists.result shouldBe AlreadyExists
-       */
-
       result.map { i =>
         i.name shouldBe "Global Warming"
         i.artists.head.name shouldBe "Pitbull"
@@ -40,8 +26,14 @@ class AlbumSpec extends UnitSpec {
 
     it("Should page tracks properly") {
       val album  = spotify.getAlbum(sweet_pitbull_album)
-      val tracks = album.tracks(limit = 4)
+      val tracks = album.tracks(limit = 4).apply()
 
+      tracks.map(_.limit shouldBe 4)
+
+//      tracks.map(_.hasPrevious shouldBe false)
+//      tracks.map(_.items().map(_.nonEmpty shouldBe false))
+
+<<<<<<< HEAD
       // No pages
       val previousPage = tracks.previousPage()
       tracks.hasPrevious.map(_ shouldBe false)
@@ -64,6 +56,22 @@ class AlbumSpec extends UnitSpec {
       tracks.hasPrevious.map(_ shouldBe false)
 //      val previousWorks = tracks.previousPage().map(_.get)
 //      tracks.getPageNumber.map(_ shouldBe 1)
+=======
+//      tracks.map(_.items().map(_ should have length 4))
+
+//      tracks.map(_.hasNext shouldBe true)
+
+//      val secondPage = tracks.map(p => p.nextPage()).apply()
+//      secondPage.flatMap(_.items() should have length 4)
+//      tracks.getPageNumber shouldBe 2
+
+//      tracks.map(_.hasNext shouldBe true)
+
+//      tracks.map(_.hasPrevious.map(_ shouldBe true))
+//      val previousWorks = tracks.map(_.previousPage()).apply()
+
+//      tracks.getPageNumber shouldBe 1
+>>>>>>> 2b6098bd981d27481bc4c420c249b56d111ad6f9
 //      previousWorks.map(_.items should have length 4)
 
     }

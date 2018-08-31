@@ -5,7 +5,6 @@ import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
 import com.softwaremill.sttp._
-import com.softwaremill.sttp.circe._
 import io.circe.{Decoder, Error}
 import io.scarman.spotify._
 import io.scarman.spotify.response._
@@ -44,6 +43,7 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Dec
         case Right(v) => v
         case Left(e)  => throw new Exception(e.error.message)
       }}
+
     }
   }
 }

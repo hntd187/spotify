@@ -1,11 +1,23 @@
 package io.scarman.spotify.http
 
-import scala.concurrent.ExecutionContext
 
-import io.scarman.spotify.response.Paging
+import scala.concurrent.Future
 
-private[spotify] trait PagingRequest[R <: Paging[_]] extends LastResponse[R] { http: HttpRequest[R] =>
+import io.scarman.spotify.request.ResultPage
 
-  protected implicit val execution: ExecutionContext
+trait PagingRequest[R <: ResultPage[_]] extends HttpRequest[R] {
+
+  protected var page: Int
+  protected var current: Future[R]
+
+  def pageNumber: Int = page
+
+  def nextPage(): Future[R]
+
+  def previousPage(): Future[R]
+
+  def hasNext: Future[Boolean]
+
+  def hasPrevious: Future[Boolean]
 
 }
