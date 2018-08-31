@@ -19,7 +19,8 @@ import monix.execution.Scheduler
   * @param spotify
   */
 case class ArtistAlbums(id: String, market: String, types: List[BaseAlbumType] = AlbumTypes.default, limit: Int = 10, offset: Int = 0)(
-    implicit spotify: Spotify, val scheduler: Scheduler)
+    implicit spotify: Spotify,
+    val scheduler: Scheduler)
     extends HttpRequest[AlbumPage]
     with PagingRequest[AlbumPage] {
 

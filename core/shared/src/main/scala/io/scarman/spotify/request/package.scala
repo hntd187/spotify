@@ -2,9 +2,7 @@ package io.scarman.spotify
 
 import scala.concurrent._
 import scala.concurrent.duration.Duration
-
-import fr.hmil.roshttp.HttpRequest
-import fr.hmil.roshttp.Protocol.HTTPS
+import com.softwaremill.sttp._
 import io.circe.Decoder
 import io.circe.generic.semiauto.deriveDecoder
 import io.scarman.spotify.{response => r}
@@ -13,8 +11,8 @@ package object request {
   type AlbumPage = r.Paging[r.ArtistAlbum]
   type TrackPage = r.Paging[r.Track]
 
-  final val base  = HttpRequest().withProtocol(HTTPS).withHost("api.spotify.com")
-  final val Token = HttpRequest().withProtocol(HTTPS).withHost("accounts.spotify.com").withPath("/api/token")
+  final val base  = uri"https://api.spotify.com"
+  final val Token = uri"accounts.spotify.com/api/token"
   final val AB    = "/v1/albums"
   final val AR    = "/v1/artists"
   final val TR    = "/v1/tracks"

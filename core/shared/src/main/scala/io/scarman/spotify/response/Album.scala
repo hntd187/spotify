@@ -4,7 +4,7 @@ import io.scarman.spotify.request.TrackPage
 
 case class Album(album_type: String,
                  artists: List[Artist],
-                 //available_markets: List[String],
+                 available_markets: Option[List[String]],
                  copyrights: List[Copyright],
                  external_ids: ExternalId,
                  external_urls: ExternalUrl,

@@ -13,7 +13,8 @@ import monix.execution.Scheduler
   * @param offset
   * @param spotify
   */
-case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify, scheduler: Scheduler) extends HttpRequest[response.Artists] {
+case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify, scheduler: Scheduler)
+    extends HttpRequest[response.Artists] {
 
   lazy protected val request = base
     .withPath(s"$AR/")

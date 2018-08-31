@@ -14,7 +14,8 @@ import monix.execution.Scheduler
   * @param offset
   * @param spotify
   */
-case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify, val scheduler: Scheduler)
+case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify,
+                                                                                            val scheduler: Scheduler)
     extends HttpRequest[TrackPage]
     with PagingRequest[TrackPage] {
 

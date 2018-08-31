@@ -1,69 +1,49 @@
 package io.scarman.spotify.http
 
 import scala.annotation.implicitNotFound
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext.Implicits.global
+import scala.concurrent.Future
 
-import fr.hmil.roshttp.response.SimpleHttpResponse
-import fr.hmil.roshttp.{HttpRequest => HR}
-import io.circe._
-import io.circe.generic.auto._
-import io.circe.parser._
-import scribe.Logging
+import com.softwaremill.sttp._
+import com.softwaremill.sttp.circe._
+import io.circe.{Decoder, Error}
 import io.scarman.spotify._
 import io.scarman.spotify.response._
-import monix.execution.Scheduler
+import scribe.Logging
 
 @implicitNotFound("Cannot find Spotify client, did you create one?")
-private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Decoder[R], scheduler: Scheduler)
+private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify, d: Decoder[R], backend: SttpBackend[Future, Nothing])
     extends RequestJson
     with LastResponse[R]
     with Logging {
 
-  implicit private val ec: ExecutionContext = scheduler
-  protected val request: HR
+  protected val request: Req[R]
 
   def apply(): Future[R] = {
     for (response <- get(request))
       yield response
   }
 
-  private def toJson(resp: SimpleHttpResponse): Either[ErrorCase, R] = {
-    val body = resp.body
-    json = parse(body).toOption
-    resp.statusCode match {
-      case 200 =>
-        lastResponse = json.get.as[R]
-        lastResponse match {
-          case Right(v) => Right(v)
-          case Left(e)  => Left(ErrorCase(response.Error(200, e.getMessage)))
-        }
-      case _ =>
-        json match {
-          case Some(j) =>
-            j.as[ErrorCase] match {
-              case Right(ec) => Left(ec)
-              case Left(df)  => throw df
-            }
-          case None => Left(ErrorCase(response.Error(resp.statusCode, "Empty, non 200 response returned")))
-        }
+  private def toJson(resp: NoFResp[R]): Either[ErrorCase, R] = {
+    if (resp.is200) {
+      resp.body match {
+        case Left(e)         => Left(ErrorCase(Error(resp.code, e)))
+        case Right(Right(v)) => Right(v)
+      }
+    } else {
+      Left(ErrorCase(Error(resp.code, s"Non-200 Response code ${resp.code}")))
     }
   }
 
-  protected def get(req: HR): Future[R] = {
-    logger.info(s"Request made for URL: ${req.url}")
+  protected def get(req: Req[R]): Future[R] = {
+    logger.debug(s"Request made for URL: ${req.uri}")
     spotify.getToken.flatMap { t =>
-      val authReq = req.withHeaders(("Authorization", s"Bearer $t"), ("Content-Type", "application/json"))
-      for {
-        resp <- authReq.send()
-        data = toJson(resp)
-      } yield {
-        data match {
-          case Right(r) => r
-          case Left(ErrorCase(response.Error(code, message))) =>
-            logger.info(resp.body)
-            throw new RuntimeException(s"Error, Code: $code, Message: $message")
-        }
-      }
+      val authReq = req.headers(("Authorization", s"Bearer $t"), ("Content-Type", "application/json"))
+      val resp    = authReq.send()
+      resp.map{r => toJson(r) match {
+        case Right(v) => v
+        case Left(e)  => throw new Exception(e.error.message)
+      }}
     }
   }
 }

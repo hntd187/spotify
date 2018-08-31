@@ -12,7 +12,8 @@ import monix.execution.Scheduler
   * @param market
   * @param spotify
   */
-case class Tracks(id: List[String], market: String = "ES")(implicit spotify: Spotify, scheduler: Scheduler) extends HttpRequest[response.Tracks] {
+case class Tracks(id: List[String], market: String = "ES")(implicit spotify: Spotify, scheduler: Scheduler)
+    extends HttpRequest[response.Tracks] {
   override protected val request = base
     .withPath(TR)
     .withQueryParameter("ids", id.mkString(","))

@@ -1,8 +1,11 @@
 package io.scarman.spotify.request
 
-import io.scarman.spotify.http.HttpRequest
+import scala.concurrent.Future
+
+import com.softwaremill.sttp._
+import com.softwaremill.sttp.circe._
 import io.scarman.spotify._
-import monix.execution.Scheduler
+import io.scarman.spotify.http.HttpRequest
 
 /**
   * A collection of albums.
@@ -14,12 +17,10 @@ import monix.execution.Scheduler
   * @param offset
   * @param spotify
   */
-case class Albums(ids: List[String], market: String = "ES", limit: Int = 10, offset: Int = 0)(implicit spotify: Spotify, scheduler: Scheduler)
+case class Albums(ids: List[String], market: String = "ES", limit: Int = 10, offset: Int = 0)(implicit spotify: Spotify,
+                                                                                              backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Albums] {
-  lazy protected val request = base
-    .withPath(s"$AB/")
-    .withQueryParameter("ids", ids.mkString(","))
-    .withQueryParameter("market", market)
-    .withQueryParameter("limit", limit.toString)
-    .withQueryParameter("offset", offset.toString)
+  lazy protected val request = sttp
+    .get(uri"$base/$AB".params(("ids", ids.mkString(",")), ("market", market), ("limit", limit.toString), ("offset", offset.toString)))
+    .response(asJson[response.Albums])
 }

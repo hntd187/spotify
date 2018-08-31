@@ -5,22 +5,21 @@ import java.util.Base64
 import scala.concurrent._
 import scala.util._
 
-import fr.hmil.roshttp.body._
-import fr.hmil.roshttp.{Method, HttpRequest => HR}
+import com.softwaremill.sttp._
+import com.softwaremill.sttp.circe._
 import io.circe.generic.auto._
-import io.circe.parser._
 import io.scarman.spotify.request.Endpoints
 import io.scarman.spotify.response.AccessToken
-import monix.execution.Scheduler
 import scribe.Logging
 
-private[spotify] trait AuthToken extends Logging {
+private[spotify] trait AuthToken extends Logging with MediaTypes with HeaderNames {
 
-  protected implicit val scheduler: Scheduler
+  implicit val backend: SttpBackend[Future, Nothing]
+  implicit val execution: ExecutionContext
 
-  private val baseRequest = Endpoints.Token
-    .withMethod(Method.POST)
-    .withHeader("Content-Type", "application/x-www-form-urlencoded")
+  private val baseRequest: Req[AccessToken] = sttp.post(Endpoints.Token)
+    .header(ContentType, Json)
+    .response(asJson[AccessToken])
 
   private val baseBody = ("grant_type", "client_credentials")
 
@@ -28,22 +27,23 @@ private[spotify] trait AuthToken extends Logging {
     Base64.getEncoder.encodeToString(s"$id:$secret".getBytes)
   }
 
-  private def tokenRequest(req: HR): Future[String] = {
-    req.send().map(_.body)
+  private def tokenRequest(req: Req[AccessToken]): Future[AccessToken] = {
+    req.send().map(_.body).map {
+      case Right(Right(at)) => at
+      case Right(Left(err)) => throw new Exception(s"Can't get auth token ${err.message}")
+      case Left(err)        => throw new Exception(s"Can't get auth token: $err")
+    }
   }
 
   protected def getToken(id: String, secret: String): Future[AccessToken] = {
     val authHeader: String = base64(id, secret)
-    val request = baseRequest
-      .withHeader("Authorization", s"Basic $authHeader")
-      .withBody(URLEncodedBody(baseBody))
+    val request: Req[AccessToken] = baseRequest
+      .header(Authorization, s"Basic $authHeader")
+      .body(baseBody)
 
     logger.info(s"Requesting token for $authHeader")
-    val req = tokenRequest(request)
-    req.map(s => decode[AccessToken](s)).map {
-      case Right(v) => v
-      case Left(e)  => throw e
-    }
+    tokenRequest(request)
+
   }
 
   protected[spotify] def refreshToken(id: String, secret: String, token: Future[AccessToken]): Future[AccessToken] = {
