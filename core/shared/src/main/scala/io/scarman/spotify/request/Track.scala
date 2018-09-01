@@ -1,8 +1,12 @@
 package io.scarman.spotify.request
 
+import com.softwaremill.sttp.SttpBackend
 import io.scarman.spotify.http.HttpRequest
 import io.scarman.spotify.{Spotify, response => r}
-import monix.execution.Scheduler
+
+import scala.concurrent.Future
+
+import com.softwaremill.sttp._
 
 /**
   * Get a single track.
@@ -12,8 +16,10 @@ import monix.execution.Scheduler
   * @param market
   * @param spotify
   */
-case class Track(id: String, market: String = "ES")(implicit spotify: Spotify, scheduler: Scheduler) extends HttpRequest[r.Track] {
-  override protected val request = base.withPath(s"$TR/$id").withQueryParameter("market", market)
+case class Track(id: String, market: String = "ES")(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing])
+    extends HttpRequest[r.Track] {
+
+  lazy protected val reqUri = uri"$base$TR/$id".param("market", market)
 
   def getAudioFeatures: AudioFeatures = AudioFeatures(id)
   def getAudioAnalysis: AudioAnalysis = AudioAnalysis(id)

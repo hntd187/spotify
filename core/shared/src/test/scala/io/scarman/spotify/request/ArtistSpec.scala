@@ -56,7 +56,7 @@ class ArtistSpec extends UnitSpec {
 
       response.map(_().head.name shouldBe "deadmau5")
       response.map(_(1).name shouldBe "Ratatat")
-      response.map(_().last.name shouldBe "Avicii")
+      response.map(_().last.name shouldBe "deadmau5")
     }
   }
 }

@@ -1,9 +1,9 @@
 package io.scarman.spotify
 
-import scala.concurrent.Future
-
 import io.scarman.spotify.request.UnitSpec
 import io.scarman.spotify.response.AccessToken
+
+import scala.concurrent.Future
 
 class TokenSpec extends UnitSpec {
 

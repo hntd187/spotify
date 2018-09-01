@@ -17,11 +17,14 @@ private[spotify] trait AuthToken extends Logging with MediaTypes with HeaderName
   implicit val backend: SttpBackend[Future, Nothing]
   implicit val execution: ExecutionContext
 
-  private val baseRequest: Req[AccessToken] = sttp.post(Endpoints.Token)
-    .header(ContentType, Json)
-    .response(asJson[AccessToken])
-
   private val baseBody = ("grant_type", "client_credentials")
+
+  private val baseRequest: Req[AccessToken] = sttp
+    .post(Endpoints.Token)
+    .header(ContentType, Form)
+    .header(AccessControlAllowOrigin, "*")
+    .response(asJson[AccessToken])
+    .body(baseBody)
 
   private def base64(id: String, secret: String): String = {
     Base64.getEncoder.encodeToString(s"$id:$secret".getBytes)
@@ -30,8 +33,8 @@ private[spotify] trait AuthToken extends Logging with MediaTypes with HeaderName
   private def tokenRequest(req: Req[AccessToken]): Future[AccessToken] = {
     req.send().map(_.body).map {
       case Right(Right(at)) => at
-      case Right(Left(err)) => throw new Exception(s"Can't get auth token ${err.message}")
-      case Left(err)        => throw new Exception(s"Can't get auth token: $err")
+      case Right(Left(err)) => throw new Exception(s"Can't get auth token $req\n$err")
+      case Left(err)        => throw new Exception(s"Can't get auth token: $req\n$err")
     }
   }
 
@@ -39,7 +42,6 @@ private[spotify] trait AuthToken extends Logging with MediaTypes with HeaderName
     val authHeader: String = base64(id, secret)
     val request: Req[AccessToken] = baseRequest
       .header(Authorization, s"Basic $authHeader")
-      .body(baseBody)
 
     logger.info(s"Requesting token for $authHeader")
     tokenRequest(request)

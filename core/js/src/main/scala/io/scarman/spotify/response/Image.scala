@@ -1,10 +1,15 @@
 package io.scarman.spotify.response
 
+import com.softwaremill.sttp._
+import io.scarman.spotify.Spotify
+import io.scarman.spotify.request.ImageDownload
+
 import scala.concurrent.Future
 
-import io.scarman.spotify.http._
+case class Image(height: Int, url: String, width: Int) {
 
-case class Image(height: Int, url: String, width: Int) extends FileDownload {
-  def download(location: String): Future[DownloadResults]                           = download(location, None)
-  def download(location: String, checksum: Option[String]): Future[DownloadResults] = downloadFile(url, location, checksum)
+  def download()(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing]): ImageDownload = {
+    ImageDownload(url, "", None)
+  }
+
 }

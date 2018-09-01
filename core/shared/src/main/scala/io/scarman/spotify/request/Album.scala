@@ -1,11 +1,10 @@
 package io.scarman.spotify.request
 
-import scala.concurrent.Future
-
-import com.softwaremill.sttp.{SttpBackend, _}
-import com.softwaremill.sttp.circe.asJson
+import com.softwaremill.sttp._
 import io.scarman.spotify._
-import io.scarman.spotify.http.{HttpRequest, Req}
+import io.scarman.spotify.http.HttpRequest
+
+import scala.concurrent.Future
 
 /**
   * An album of fire.
@@ -17,7 +16,8 @@ import io.scarman.spotify.http.{HttpRequest, Req}
   */
 case class Album(id: String, market: String = "ES")(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Album] {
-  lazy protected val request: Req[response.Album] = sttp.get(uri"$base/$AB/$id".param("market", market)).response(asJson[response.Album])
+
+  lazy protected val reqUri = uri"$base$AB/$id".param("market", market)
 
   def tracks(limit: Int = 10, offset: Int = 0): AlbumTracks = {
     AlbumTracks(id, market, limit, offset)

@@ -1,23 +1,25 @@
 package io.scarman.spotify
 
+import com.softwaremill.sttp._
+import io.circe._
+import io.circe.generic.semiauto._
+import io.scarman.spotify.http.{DownloadResult, DownloadResults}
+import io.scarman.spotify.{response => r}
+
 import scala.concurrent._
 import scala.concurrent.duration.Duration
-import com.softwaremill.sttp._
-import io.circe.Decoder
-import io.circe.generic.semiauto.deriveDecoder
-import io.scarman.spotify.{response => r}
 
 package object request {
   type AlbumPage = r.Paging[r.ArtistAlbum]
   type TrackPage = r.Paging[r.Track]
 
-  final val base  = uri"https://api.spotify.com"
+  final val base  = uri"https://api.spotify.com/v1/"
   final val Token = uri"accounts.spotify.com/api/token"
-  final val AB    = "/v1/albums"
-  final val AR    = "/v1/artists"
-  final val TR    = "/v1/tracks"
-  final val AF    = "/v1/audio-features"
-  final val AA    = "/v1/audio-analysis"
+  final val AB    = "albums"
+  final val AR    = "artists"
+  final val TR    = "tracks"
+  final val AF    = "audio-features"
+  final val AA    = "audio-analysis"
 
   implicit class EnrichedFuture[T](f: Future[T]) {
     def apply() = Await.result(f, Duration.Inf)
@@ -28,6 +30,8 @@ package object request {
   implicit val eu: Decoder[r.ExternalUrl]    = deriveDecoder
   implicit val fd: Decoder[r.Followers]      = deriveDecoder
   implicit val idd: Decoder[r.Image]         = deriveDecoder
+  implicit val fdrr: Decoder[DownloadResult] = deriveDecoder
+  implicit val fdr: Decoder[DownloadResults] = deriveDecoder
   implicit val cd: Decoder[r.Copyright]      = deriveDecoder
   implicit val eid: Decoder[r.ExternalId]    = deriveDecoder
   implicit val td: Decoder[r.Track]          = deriveDecoder

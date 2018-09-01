@@ -1,8 +1,10 @@
 package io.scarman.spotify.request
 
-import io.scarman.spotify.http.HttpRequest
+import com.softwaremill.sttp._
 import io.scarman.spotify._
-import monix.execution.Scheduler
+import io.scarman.spotify.http.HttpRequest
+
+import scala.concurrent.Future
 
 /**
   * Get more than one artist at once.
@@ -13,12 +15,10 @@ import monix.execution.Scheduler
   * @param offset
   * @param spotify
   */
-case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify, scheduler: Scheduler)
+case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Artists] {
 
-  lazy protected val request = base
-    .withPath(s"$AR/")
-    .withQueryStringRaw(s"ids=${ids.mkString(",")}")
-    .withQueryParameter("limit", limit.toString)
-    .withQueryParameter("offset", offset.toString)
+  lazy protected val reqUri = uri"$base$AR/?ids=$ids"
+    .param("limit", limit.toString)
+    .param("offset", offset.toString)
 }

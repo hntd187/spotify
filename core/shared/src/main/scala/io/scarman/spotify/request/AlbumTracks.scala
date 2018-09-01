@@ -1,7 +1,11 @@
 package io.scarman.spotify.request
 
+import com.softwaremill.sttp._
+import com.softwaremill.sttp.circe._
 import io.scarman.spotify.Spotify
 import io.scarman.spotify.http._
+
+import scala.concurrent.Future
 
 /**
   * The tracks on an album.
@@ -13,24 +17,18 @@ import io.scarman.spotify.http._
   * @param offset
   * @param spotify
   */
-case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5, paging: Boolean = false)(
-    implicit spotify: Spotify,
-    val scheduler: Scheduler)
+case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify,
+                                                                                            val backend: SttpBackend[Future, Nothing])
     extends HttpRequest[TrackPage] {
 
-  lazy protected val request = if (!paging) {
-    base
-      .withPath(s"$AB/$id/tracks")
-      .withQueryParameter("market", market)
-      .withQueryParameter("limit", limit.toString)
-      .withQueryParameter("offset", offset.toString)
-  } else {
-    HR(id)
-  }
+  lazy protected val reqUri = uri"$base$AB/$id/tracks"
+    .param("market", market)
+    .param("limit", limit.toString)
+    .param("offset", offset.toString)
 
   def nextPage(): Option[AlbumTracks] = {
     for {
       p <- this()().next
-    } yield AlbumTracks(p, paging = true)
+    } yield AlbumTracks(p)
   }
 }

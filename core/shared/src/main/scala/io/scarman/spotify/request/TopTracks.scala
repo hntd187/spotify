@@ -1,10 +1,14 @@
 package io.scarman.spotify.request
 
-import io.scarman.spotify.http.HttpRequest
+import com.softwaremill.sttp.SttpBackend
 import io.scarman.spotify._
-import monix.execution.Scheduler
+import io.scarman.spotify.http.HttpRequest
 
-case class TopTracks(id: String, country: String = "ES")(implicit spotify: Spotify, scheduler: Scheduler)
+import com.softwaremill.sttp._
+
+import scala.concurrent.Future
+
+case class TopTracks(id: String, country: String = "ES")(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Tracks] {
-  lazy protected val request = base.withPath(s"$AR/$id/top-tracks").withQueryParameter("country", country)
+  lazy protected val reqUri = uri"$base$AR/$id/top-tracks".param("country", country)
 }

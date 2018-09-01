@@ -1,9 +1,10 @@
 package io.scarman.spotify.request
 
-import io.scarman.spotify.Spotify
+import com.softwaremill.sttp.SttpBackend
 import io.scarman.spotify.http.HttpRequest
-import io.scarman.spotify.response
-import monix.execution.Scheduler
+import io.scarman.spotify.{Spotify, response}
+import com.softwaremill.sttp._
+import scala.concurrent.Future
 
 /**
   * This queries for the audio analysis of a track. Beware, this usually returns a lot of data.
@@ -12,6 +13,7 @@ import monix.execution.Scheduler
   * @param id
   * @param spotify
   */
-case class AudioAnalysis(id: String)(implicit spotify: Spotify, scheduler: Scheduler) extends HttpRequest[response.AudioAnalysis] {
-  lazy protected val request = base.withPath(s"$AA/$id")
+case class AudioAnalysis(id: String)(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing])
+    extends HttpRequest[response.AudioAnalysis] {
+  lazy protected val reqUri = uri"$base$AA/$id"
 }

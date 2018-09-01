@@ -1,11 +1,10 @@
 package io.scarman.spotify.request
 
-import scala.concurrent.Future
-
 import com.softwaremill.sttp._
-import com.softwaremill.sttp.circe._
 import io.scarman.spotify._
 import io.scarman.spotify.http.HttpRequest
+
+import scala.concurrent.Future
 
 /**
   * A collection of albums.
@@ -20,7 +19,11 @@ import io.scarman.spotify.http.HttpRequest
 case class Albums(ids: List[String], market: String = "ES", limit: Int = 10, offset: Int = 0)(implicit spotify: Spotify,
                                                                                               backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Albums] {
-  lazy protected val request = sttp
-    .get(uri"$base/$AB".params(("ids", ids.mkString(",")), ("market", market), ("limit", limit.toString), ("offset", offset.toString)))
-    .response(asJson[response.Albums])
+
+  lazy protected val reqUri =
+    uri"$base$AB"
+      .param("ids", ids.mkString(","))
+      .param("market", market)
+      .param("limit", limit.toString)
+      .param("offset", offset.toString)
 }
