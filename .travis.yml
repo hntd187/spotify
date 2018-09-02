@@ -29,11 +29,9 @@ script:
     sbt ++$TRAVIS_SCALA_VERSION
     clean
     coverage
-    coreJVM/test
+    core/test
   - >
     sbt ++$TRAVIS_SCALA_VERSION
-    clean
-    coverage
     coreJS/test
 
-after_success: "sbt coverageReport coveralls"
+after_success: "sbt core/coverageReport core/coveralls"
