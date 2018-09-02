@@ -32,4 +32,4 @@ script:
     sbt ++$TRAVIS_SCALA_VERSION
     coreJS/test
 
-after_success: "sbt coreJVM/coverageReport coreJVM/coveralls"
+after_success: "sbt coverage coreJVM/coverageReport coreJVM/coveralls"
