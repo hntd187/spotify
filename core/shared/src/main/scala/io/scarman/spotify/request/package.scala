@@ -22,7 +22,7 @@ package object request {
   final val AA    = "audio-analysis"
 
   implicit class EnrichedFuture[T](f: Future[T]) {
-    def apply() = Await.result(f, Duration.Inf)
+    def apply(): T = Await.result(f, Duration.Inf)
   }
 
   implicit val d: Decoder[r.Album]           = deriveDecoder

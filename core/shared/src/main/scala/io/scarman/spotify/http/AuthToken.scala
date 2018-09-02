@@ -8,7 +8,7 @@ import scala.util._
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.circe._
 import io.circe.generic.auto._
-import io.scarman.spotify.request.Endpoints
+import io.scarman.spotify.request._
 import io.scarman.spotify.response.AccessToken
 import scribe.Logging
 
@@ -20,7 +20,7 @@ private[spotify] trait AuthToken extends Logging with MediaTypes with HeaderName
   private val baseBody = ("grant_type", "client_credentials")
 
   private val baseRequest: Req[AccessToken] = sttp
-    .post(Endpoints.Token)
+    .post(Token)
     .header(ContentType, Form)
     .header(AccessControlAllowOrigin, "*")
     .response(asJson[AccessToken])

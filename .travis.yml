@@ -27,8 +27,8 @@ before_script:
 script:
   - >
     sbt ++$TRAVIS_SCALA_VERSION
-    core/clean
-    core/coverage
+    clean
+    coverage
     core/test
   - >
     sbt ++$TRAVIS_SCALA_VERSION

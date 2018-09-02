@@ -18,5 +18,8 @@ import com.softwaremill.sttp._
 case class Tracks(id: List[String], market: String = "ES")(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Tracks] {
 
-  lazy protected val reqUri = uri"$base$TR".param("ids", id.mkString(",")).param("market", market)
+  lazy protected val reqUri = uri"$base$TR"
+    .param("ids", id.mkString(","))
+    .param("market", market)
+
 }

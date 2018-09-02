@@ -1,7 +1,6 @@
 package io.scarman.spotify.request
 
 import com.softwaremill.sttp._
-import com.softwaremill.sttp.circe._
 import io.scarman.spotify.Spotify
 import io.scarman.spotify.http._
 
@@ -26,9 +25,4 @@ case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offse
     .param("limit", limit.toString)
     .param("offset", offset.toString)
 
-  def nextPage(): Option[AlbumTracks] = {
-    for {
-      p <- this()().next
-    } yield AlbumTracks(p)
-  }
 }

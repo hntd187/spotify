@@ -1,6 +1,5 @@
 package io.scarman.spotify.util
 
-import java.nio.file._
 import java.security.MessageDigest
 
 import scribe.Logging
@@ -13,16 +12,6 @@ object Checksum extends Logging {
   private val md: MessageDigest = MessageDigest.getInstance("SHA-1")
 
   def SHA1Sum(bytes: Array[Byte]): Array[Byte] = md.digest(bytes)
-
-  def verifyChecksum(filePath: Path, sum: String): Boolean = {
-    if (filePath.toFile.exists()) {
-      val fileSha1: String = Files.readAllBytes(filePath).sha1
-      logger.debug(s"$sum == $fileSha1 (${fileSha1 == sum})")
-      fileSha1 == sum
-    } else {
-      true
-    }
-  }
 
   implicit def bytesToSha(bytes: Array[Byte]): String = bytes.string
 

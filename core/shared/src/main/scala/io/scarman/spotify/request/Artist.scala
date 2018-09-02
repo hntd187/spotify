@@ -1,7 +1,6 @@
 package io.scarman.spotify.request
 
 import com.softwaremill.sttp._
-import com.softwaremill.sttp.circe._
 import io.scarman.spotify._
 import io.scarman.spotify.http.HttpRequest
 
