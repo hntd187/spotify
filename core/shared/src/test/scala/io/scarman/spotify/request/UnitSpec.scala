@@ -1,5 +1,7 @@
 package io.scarman.spotify.request
 
+import java.io.File
+
 import io.scarman.spotify.Spotify
 import org.scalatest._
 import org.scalatest.concurrent._

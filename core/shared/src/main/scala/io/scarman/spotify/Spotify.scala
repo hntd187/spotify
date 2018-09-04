@@ -2,12 +2,12 @@ package io.scarman
 package spotify
 
 import com.softwaremill.sttp._
-
-import scala.concurrent.{ExecutionContext, Future}
-import scribe.Logging
 import io.scarman.spotify.http.AuthToken
 import io.scarman.spotify.request.BaseAlbumType
 import io.scarman.spotify.response.AccessToken
+
+import scala.concurrent.{ExecutionContext, Future}
+import java.util.concurrent.atomic.AtomicReference
 
 /**
   * The main entrance point into the Spotify API. This is required for all API calls, but most times it's
@@ -18,29 +18,30 @@ import io.scarman.spotify.response.AccessToken
   * @param secret
   */
 class Spotify(id: String, secret: String)(implicit val backend: SttpBackend[Future, Nothing],
-                                          val execution: ExecutionContext = ExecutionContext.global)
-    extends AuthToken
-    with Logging {
+                                          val execution: ExecutionContext = ExecutionContext.Implicits.global)
+    extends AuthToken {
 
-  private var token: Future[AccessToken] = getToken(id, secret)
+  private val token: AtomicReference[Future[AccessToken]] = new AtomicReference[Future[AccessToken]](getToken(id, secret))
 
   private[spotify] def getToken: Future[String] = {
     for {
-      t <- token
+      t <- token.get()
     } yield {
       if (t.isExpired) {
-        logger.info("Token expired, requesting new one...")
-        token = getToken(id, secret)
+        logger.debug("Token expired, requesting new one...")
+        token.set(getToken(id, secret))
       }
+      logger.debug(s"Providing Token: ${t.access_token}")
       t.access_token
     }
   }
 
   def isExpired: Future[Boolean] = {
     for {
-      t <- token
+      t <- token.get()
     } yield t.isExpired
   }
+
   def getArtist(id: String, market: String = "ES"): Artist = Artist(id, market)(this, backend)
   def getAlbum(id: String, market: String = "ES"): Album   = Album(id, market)(this, backend)
   def getTrack(id: String, market: String = "ES"): Track   = Track(id, market)(this, backend)

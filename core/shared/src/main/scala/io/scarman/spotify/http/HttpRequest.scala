@@ -37,7 +37,7 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify,
   }
 
   protected def get(req: Req[R]): Future[R] = {
-    logger.info(s"Request made for URL: ${req.uri}")
+    logger.debug(s"Request made for URL: ${req.uri}")
     spotify.getToken.flatMap { t =>
       val authReq = req.headers(("Authorization", s"Bearer $t"), ("Content-Type", "application/json"))
       val resp    = authReq.send()
@@ -47,7 +47,6 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify,
           case Left(e)  => throw new Exception(s"${e.error.message} - ${authReq.uri}")
         }
       }
-
     }
   }
 }

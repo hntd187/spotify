@@ -2,9 +2,6 @@ package io.scarman.spotify.http
 
 import java.util.Base64
 
-import scala.concurrent._
-import scala.util._
-
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.circe._
 import io.circe.generic.auto._
@@ -12,17 +9,19 @@ import io.scarman.spotify.request._
 import io.scarman.spotify.response.AccessToken
 import scribe.Logging
 
-private[spotify] trait AuthToken extends Logging with MediaTypes with HeaderNames {
+import scala.concurrent._
+import scala.util._
 
-  implicit val backend: SttpBackend[Future, Nothing]
-  implicit val execution: ExecutionContext
+abstract class AuthToken(implicit backend: SttpBackend[Future, Nothing], execution: ExecutionContext = ExecutionContext.Implicits.global)
+    extends Logging
+    with MediaTypes
+    with HeaderNames {
 
   private val baseBody = ("grant_type", "client_credentials")
 
   private val baseRequest: Req[AccessToken] = sttp
     .post(Token)
     .header(ContentType, Form)
-    .header(AccessControlAllowOrigin, "*")
     .response(asJson[AccessToken])
     .body(baseBody)
 
@@ -31,21 +30,32 @@ private[spotify] trait AuthToken extends Logging with MediaTypes with HeaderName
   }
 
   private def tokenRequest(req: Req[AccessToken]): Future[AccessToken] = {
-    req.send().map(_.body).map {
+    val initialReq = req.send()
+
+    initialReq.map { response =>
+      if (response.is200) {
+        response.body
+      } else {
+        if (response.code == 429) {
+          response.header(RetryAfter) match {
+            case Some(time) => throw new Exception(s"Rate Limiting: retry after $time seconds")
+            case None       => throw new Exception("Rate Limiting, but no time provided")
+          }
+        }
+        response.body
+      }
+    }.map {
       case Right(Right(at)) => at
-      case Right(Left(err)) => throw new Exception(s"Can't get auth token $req\n$err")
+      case Right(Left(err)) => throw new Exception(s"Can't get auth token: $req\n$err")
       case Left(err)        => throw new Exception(s"Can't get auth token: $req\n$err")
     }
   }
 
-  protected def getToken(id: String, secret: String): Future[AccessToken] = {
-    val authHeader: String = base64(id, secret)
-    val request: Req[AccessToken] = baseRequest
-      .header(Authorization, s"Basic $authHeader")
-
-    logger.info(s"Requesting token for $authHeader")
+  protected def getToken(id: String, secret: String, previous: Option[AccessToken] = None): Future[AccessToken] = {
+    val authHeader: String        = base64(id, secret)
+    val request: Req[AccessToken] = baseRequest.header(Authorization, s"Basic $authHeader")
+    logger.debug(s"Requesting token for $authHeader")
     tokenRequest(request)
-
   }
 
   protected[spotify] def refreshToken(id: String, secret: String, token: Future[AccessToken]): Future[AccessToken] = {

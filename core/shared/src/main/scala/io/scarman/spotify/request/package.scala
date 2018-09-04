@@ -14,7 +14,7 @@ package object request {
   type TrackPage = r.Paging[r.Track]
 
   final val base  = uri"https://api.spotify.com/v1/"
-  final val Token = uri"accounts.spotify.com/api/token"
+  final val Token = uri"https://accounts.spotify.com/api/token"
   final val AB    = "albums"
   final val AR    = "artists"
   final val TR    = "tracks"

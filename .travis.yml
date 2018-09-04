@@ -27,11 +27,11 @@ before_script:
 script:
   - >
     sbt ++$TRAVIS_SCALA_VERSION
+    coreJS/test
+  - >
+    sbt ++$TRAVIS_SCALA_VERSION
     clean
     coverage
     core/test
-  - >
-    sbt ++$TRAVIS_SCALA_VERSION
-    coreJS/test
 
 after_success: "sbt core/coverageReport core/coveralls"

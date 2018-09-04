@@ -12,13 +12,9 @@ lazy val scribeVersion    = "2.6.0"
 lazy val browserTestSettings = Seq(
   jsEnv in Test := {
     val debugging = false
-
-    val options = new ChromeOptions().addArguments(
-      "auto-open-devtools-for-tabs",
-      "disable-web-security",
-      if (debugging) "" else "headless"
-    )
-
+    val options = new ChromeOptions()
+      .addArguments("auto-open-devtools-for-tabs", "disable-web-security")
+      .setHeadless(!debugging)
     new SeleniumJSEnv(options, SeleniumJSEnv.Config().withKeepAlive(debugging))
   }
 )
@@ -63,3 +59,4 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
     )
   )
   .jsSettings(browserTestSettings)
+  .jsSettings(coverageEnabled := false)
