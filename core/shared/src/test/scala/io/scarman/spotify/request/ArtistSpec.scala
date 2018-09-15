@@ -1,8 +1,8 @@
 package io.scarman.spotify.request
 
-class ArtistSpec extends UnitSpec {
+import PlatformSpec._
 
-  import UnitSpec._
+class ArtistSpec extends UnitSpec {
 
   describe("Tests for Artist Endpoints") {
     it("Should get Pitbull's sweet music") {
@@ -37,7 +37,10 @@ class ArtistSpec extends UnitSpec {
 
       val artistAlbums = spotify.getArtistAlbums(id = "0TnOYISbd1XYRBk9myaseg", albumType = List(fullalbum))
       val aa           = artistAlbums()
-//      val np           = artistAlbums.nextPage()
+      val np           = aa.flatMap(_.nextPage())
+      for { f <- np } {
+        f.total shouldBe 23
+      }
 
       aa.map { a =>
         a.items.head.name shouldBe "Climate Change"

@@ -6,9 +6,6 @@ import io.circe.generic.semiauto._
 import io.scarman.spotify.http.{DownloadResult, DownloadResults}
 import io.scarman.spotify.{response => r}
 
-import scala.concurrent._
-import scala.concurrent.duration.Duration
-
 package object request {
   type AlbumPage = r.Paging[r.ArtistAlbum]
   type TrackPage = r.Paging[r.Track]
@@ -20,10 +17,6 @@ package object request {
   final val TR    = "tracks"
   final val AF    = "audio-features"
   final val AA    = "audio-analysis"
-
-  implicit class EnrichedFuture[T](f: Future[T]) {
-    def apply(): T = Await.result(f, Duration.Inf)
-  }
 
   implicit val d: Decoder[r.Album]           = deriveDecoder
   implicit val ad: Decoder[r.Artist]         = deriveDecoder

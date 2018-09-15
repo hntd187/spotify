@@ -1,5 +1,7 @@
 package io.scarman.spotify.request
 
+import PlatformSpec._
+
 class AlbumSpec extends UnitSpec {
 
   import UnitSpec._
@@ -26,37 +28,28 @@ class AlbumSpec extends UnitSpec {
 
     it("Should page tracks properly") {
       val album  = spotify.getAlbum(sweet_pitbull_album)
-      val tracks = album.tracks(limit = 4).apply()
+      val tracks = album.tracks(limit = 6)
 
-      tracks.map(_.limit shouldBe 4)
+      tracks().map { t =>
+        t.limit shouldBe 4
+        t.hasPrev shouldBe false
+        t.items shouldBe length(4)
+      }
 
-//      tracks.map(_.hasPrevious shouldBe false)
-//      tracks.map(_.items().map(_.nonEmpty shouldBe false))
+      // Second Page
+      val secondPage = tracks().flatMap(_.nextPage())
 
-      // No pages
-//      val previousPage = tracks.previousPage()
-//      tracks.hasPrevious.map(_ shouldBe false)
-//      previousPage.map(_.nonEmpty shouldBe false)
-//
-//      // First Page...
-//      val firstPage = tracks()
-//      firstPage.map(_.items should have length 4)
-//      tracks.hasNext.map(_ shouldBe true)
-//
-//      // Second Page
-//      val secondPage = tracks.nextPage().map(_.get)
-//      secondPage.map(_.items should have length 4)
-//      tracks.getPageNumber.map(_ shouldBe 2)
-//      tracks.hasNext.map(_ shouldBe true)
-//
-//      val thirdPage = tracks.nextPage()
-//      println(thirdPage)
-//      thirdPage.map(_.isEmpty shouldBe false)
-//      tracks.hasPrevious.map(_ shouldBe false)
-//      val previousWorks = tracks.previousPage().map(_.get)
-//      tracks.getPageNumber.map(_ shouldBe 1)
-//      previousWorks.map(_.items should have length 4)
+      secondPage.map { s =>
+        s.items should have length 6
+        s.hasNext shouldBe true
+      }
 
+      val thirdPage = secondPage.flatMap(_.nextPage())
+
+      thirdPage.map { t =>
+        t.hasNext shouldBe false
+        t.hasPrev shouldBe true
+      }
     }
 
     it("Should get some sweet daft punk albums") {

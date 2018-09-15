@@ -2,10 +2,8 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.scalajs.jsenv.selenium.SeleniumJSEnv
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
-//name := "spotify-api"
-
 lazy val scalatestVersion = "3.0.5"
-lazy val sttpVersion      = "1.3.1"
+lazy val sttpVersion      = "1.3.3"
 lazy val circeVersion     = "0.9.3"
 lazy val scribeVersion    = "2.6.0"
 

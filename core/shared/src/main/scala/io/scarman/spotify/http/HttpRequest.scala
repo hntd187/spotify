@@ -44,7 +44,7 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify,
       resp.map { r =>
         toJson(r) match {
           case Right(v) => v
-          case Left(e)  => throw new Exception(s"${e.error.message} - ${authReq.uri}")
+          case Left(e)  => throw new Exception(s"${e.error.message} - ${authReq.uri}\n")
         }
       }
     }
