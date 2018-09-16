@@ -38,17 +38,21 @@ class AlbumSpec extends UnitSpec {
 
       // Second Page
       val secondPage = tracks().flatMap(_.nextPage())
-
       secondPage.map { s =>
         s.items should have length 6
         s.hasNext shouldBe true
       }
 
       val thirdPage = secondPage.flatMap(_.nextPage())
-
       thirdPage.map { t =>
         t.hasNext shouldBe false
         t.hasPrev shouldBe true
+      }
+
+      val secondPageAgain = thirdPage.flatMap(_.previousPage())
+      secondPageAgain.map { sta =>
+        sta.hasNext shouldBe true
+        sta.hasPrev shouldBe true
       }
     }
 

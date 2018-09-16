@@ -82,7 +82,7 @@ case class AudioAnalysis(bars: List[Bar],
   def numSegments: Int = segments.length
   def numTatums: Int   = tatums.length
 
-  def averageBarLength     = bars.map(_.duration).sum / numBars
-  def averageBarConfidence = bars.map(_.confidence).sum / numBars
+  def averageBarLength: Double     = bars.map(_.duration).sum / numBars
+  def averageBarConfidence: Double = bars.map(_.confidence).sum / numBars
 
 }

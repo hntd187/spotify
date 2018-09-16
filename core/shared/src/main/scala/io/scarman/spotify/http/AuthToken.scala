@@ -30,21 +30,7 @@ abstract class AuthToken(implicit backend: SttpBackend[Future, Nothing], executi
   }
 
   private def tokenRequest(req: Req[AccessToken]): Future[AccessToken] = {
-    val initialReq = req.send()
-
-    initialReq.map { response =>
-      if (response.is200) {
-        response.body
-      } else {
-        if (response.code == 429) {
-          response.header(RetryAfter) match {
-            case Some(time) => throw new Exception(s"Rate Limiting: retry after $time seconds")
-            case None       => throw new Exception("Rate Limiting, but no time provided")
-          }
-        }
-        response.body
-      }
-    }.map {
+    req.send().map(_.body).map {
       case Right(Right(at)) => at
       case Right(Left(err)) => throw new Exception(s"Can't get auth token: $req\n$err")
       case Left(err)        => throw new Exception(s"Can't get auth token: $req\n$err")

@@ -1,8 +1,9 @@
 package io.scarman.spotify
-import scala.concurrent.Future
 
 import com.softwaremill.sttp._
 import io.circe.Error
+
+import scala.concurrent.Future
 
 package object http {
   type Req[R]     = RequestT[Id, Either[DeserializationError[Error], R], Nothing]

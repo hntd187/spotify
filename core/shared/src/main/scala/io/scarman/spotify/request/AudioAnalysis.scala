@@ -1,9 +1,9 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp.SttpBackend
+import com.softwaremill.sttp._
 import io.scarman.spotify.http.HttpRequest
 import io.scarman.spotify.{Spotify, response}
-import com.softwaremill.sttp._
+
 import scala.concurrent.Future
 
 /**

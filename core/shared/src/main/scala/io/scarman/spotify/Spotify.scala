@@ -1,13 +1,14 @@
 package io.scarman
 package spotify
 
+import java.util.concurrent.atomic.AtomicReference
+
 import com.softwaremill.sttp._
 import io.scarman.spotify.http.AuthToken
 import io.scarman.spotify.request.BaseAlbumType
 import io.scarman.spotify.response.AccessToken
 
 import scala.concurrent.{ExecutionContext, Future}
-import java.util.concurrent.atomic.AtomicReference
 
 /**
   * The main entrance point into the Spotify API. This is required for all API calls, but most times it's

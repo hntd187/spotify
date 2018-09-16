@@ -6,10 +6,9 @@ import scribe.Logging
 import scala.concurrent.{ExecutionContext, Future}
 
 trait FileRequest extends Logging {
-  protected implicit val backend: SttpBackend[Future, Nothing]
-  protected implicit val execution: ExecutionContext
 
-  protected def downloadFile(fileUrl: String, outputLocation: String): Future[DownloadResults] = {
+  protected def downloadFile(fileUrl: String, outputLocation: String)(implicit b: SttpBackend[Future, Nothing],
+                                                                      ec: ExecutionContext): Future[DownloadResults] = {
     logger.debug(s"Requesting Image from: $fileUrl")
     sttp.get(uri"$fileUrl").response(asByteArray).send().map { response =>
       if (response.is200) {

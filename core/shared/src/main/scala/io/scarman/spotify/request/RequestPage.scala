@@ -7,5 +7,7 @@ import io.scarman.spotify.http.HttpRequest
 
 import scala.concurrent.Future
 
-case class RequestPage[R](override val reqUri: Uri)(implicit spotify: Spotify, val backend: SttpBackend[Future, Nothing], d: Decoder[R])
+case class RequestPage[R](override val reqUri: Uri, pageNumber: Int = 1)(implicit spotify: Spotify,
+                                                                         val backend: SttpBackend[Future, Nothing],
+                                                                         d: Decoder[R])
     extends HttpRequest[R]

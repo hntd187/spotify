@@ -1,12 +1,10 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp.SttpBackend
+import com.softwaremill.sttp._
 import io.scarman.spotify.http.HttpRequest
 import io.scarman.spotify.{Spotify, response => r}
 
 import scala.concurrent.Future
-
-import com.softwaremill.sttp._
 
 /**
   * Get a single track.
