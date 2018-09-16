@@ -4,8 +4,6 @@ import PlatformSpec._
 
 class AlbumSpec extends UnitSpec {
 
-  import UnitSpec._
-
   describe("Tests for Album Endpoints") {
     it("Should get a sweet Pitbull album") {
       val album  = spotify.getAlbum(id = sweet_pitbull_album)
@@ -36,6 +34,10 @@ class AlbumSpec extends UnitSpec {
         t.items shouldBe length(4)
       }
 
+      recoverToSucceededIf[Exception] {
+        tracks().flatMap(_.previousPage())
+      }
+
       // Second Page
       val secondPage = tracks().flatMap(_.nextPage())
       secondPage.map { s =>
@@ -49,6 +51,10 @@ class AlbumSpec extends UnitSpec {
         t.hasPrev shouldBe true
       }
 
+      recoverToSucceededIf[Exception] {
+        thirdPage.flatMap(_.nextPage())
+      }
+
       val secondPageAgain = thirdPage.flatMap(_.previousPage())
       secondPageAgain.map { sta =>
         sta.hasNext shouldBe true
@@ -56,20 +62,20 @@ class AlbumSpec extends UnitSpec {
       }
     }
 
+    it("Should error on a bad ID") {
+      val a = Album("asdf1234")
+      recoverToSucceededIf[Exception](a())
+    }
+
     it("Should get some sweet daft punk albums") {
       val albums = spotify.getAlbums("382ObEPsp2rxGrnsizN5TX", "1A2GTWGtFfWp7KSQTwWOyo")
       val result = albums()
 
       result.map { r =>
-        val artists = for {
-          album  <- r.albums
-          artist <- album.artists
-        } yield (artist.name, album.name)
-
-        artists.head._1 shouldBe "Daft Punk"
-        artists.head._2 shouldBe "TRON: Legacy Reconfigured"
-        artists.last._1 shouldBe "Daft Punk"
-        artists.last._2 shouldBe "Human After All"
+        r(0).artists.head.name shouldBe "Daft Punk"
+        r().head.name shouldBe "TRON: Legacy Reconfigured"
+        r(1).artists.head.name shouldBe "Daft Punk"
+        r().last.name shouldBe "Human After All"
       }
     }
   }

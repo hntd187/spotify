@@ -26,13 +26,10 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify,
   }
 
   private def toJson(resp: NoFResp[R]): Either[ErrorCase, R] = {
-    if (resp.is200) {
-      resp.unsafeBody match {
-        case Right(v) => Right(v)
-        case Left(e)  => Left(ErrorCase(response.Error(resp.code, e.message)))
-      }
-    } else {
-      Left(ErrorCase(response.Error(resp.code, s"Non-200 Response code ${resp.code}, ${resp.statusText}")))
+    resp.body match {
+      case Right(Right(v)) => Right(v)
+      case Right(Left(e))  => Left(ErrorCase(response.Error(resp.code, e.message)))
+      case Left(e)         => Left(ErrorCase(response.Error(resp.code, s"Non-200 Response code ${resp.code}, ${resp.statusText}\n $e")))
     }
   }
 

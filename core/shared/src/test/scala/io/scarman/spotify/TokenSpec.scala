@@ -19,7 +19,7 @@ class TokenSpec extends UnitSpec {
       val t = spotify.getToken
 
       t.flatMap { tok =>
-        val bumToken = AccessToken(tok, "", -1, None, None)
+        val bumToken = AccessToken.expired
         spotify.refreshToken(appId, appSecret, Future.successful(bumToken))
       }
 

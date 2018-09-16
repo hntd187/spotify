@@ -10,10 +10,8 @@ import scala.concurrent.{ExecutionContext, Future}
 
 trait FileRequest extends Logging {
 
-  implicit val backend: SttpBackend[Future, Nothing]
-  implicit val execution: ExecutionContext
-
-  protected def downloadFile(fileUrl: String, outputLocation: String): Future[DownloadResults] = {
+  protected def downloadFile(fileUrl: String, outputLocation: String)(implicit b: SttpBackend[Future, Nothing],
+                                                                      ec: ExecutionContext): Future[DownloadResults] = {
     val file = Paths.get(outputLocation)
     sttp.get(uri"$fileUrl").response(asPath(file, overwrite = true)).send().map { response =>
       if (response.is200) {

@@ -10,7 +10,7 @@ import scala.concurrent.Future
 case class Image(height: Int, url: String, width: Int) {
 
   def download(location: String)(implicit spotify: Spotify, backend: SttpBackend[Future, Nothing]): Future[DownloadResults] = {
-    ImageDownload(url, location, None).download()
+    download(location, None)
   }
 
   def download(location: String, checksum: Option[String])(implicit spotify: Spotify,
