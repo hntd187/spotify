@@ -1,41 +1,60 @@
-name := "spotify-api"
+import org.openqa.selenium.chrome.ChromeOptions
+import org.scalajs.jsenv.selenium.SeleniumJSEnv
+import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
-organization := "io.scarman"
+lazy val scalatestVersion = "3.0.5"
+lazy val sttpVersion      = "1.3.3"
+lazy val circeVersion     = "0.9.3"
+lazy val scribeVersion    = "2.6.0"
 
-scalaVersion := "2.12.4"
-
-licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html"))
-
-homepage := Some(url("https://www.github.com/hntd187/spotify"))
-
-bintrayPackageLabels := Seq("spotify", "music")
-
-crossScalaVersions := Seq("2.11.11", "2.12.4")
-
-scalafmtOnCompile in ThisBuild := true
-
-scalacOptions ++= Seq(
-  "-feature",
-  "-encoding",
-  "utf-8",
-  "-deprecation",
-  "-explaintypes",
-  "-language:postfixOps",
-  "-language:implicitConversions",
-  "-unchecked"
+lazy val browserTestSettings = Seq(
+  jsEnv in Test := {
+    val debugging = false
+    val options = new ChromeOptions()
+      .addArguments("auto-open-devtools-for-tabs", "disable-web-security")
+      .setHeadless(!debugging)
+    new SeleniumJSEnv(options, SeleniumJSEnv.Config().withKeepAlive(debugging))
+  }
 )
 
-lazy val dispatchVersion  = "0.13.2"
-lazy val log4jVersion     = "2.9.1"
-lazy val scalatestVersion = "3.0.4"
-lazy val nettyVersion     = "4.0.51.Final"
-
-libraryDependencies ++= Seq(
-  "net.databinder.dispatch"  %% "dispatch-core"           % dispatchVersion exclude ("io.netty", "netty-handler"),
-  "net.databinder.dispatch"  %% "dispatch-json4s-jackson" % dispatchVersion,
-  "org.apache.logging.log4j" % "log4j-core"               % log4jVersion,
-  "org.apache.logging.log4j" % "log4j-api"                % log4jVersion,
-  "org.apache.logging.log4j" % "log4j-slf4j-impl"         % log4jVersion,
-  "io.netty"                 % "netty-handler"            % nettyVersion,
-  "org.scalatest"            %% "scalatest"               % scalatestVersion % Test
+lazy val common = Seq(
+  name := "spotify-api",
+  organization := "io.scarman",
+  scalaVersion := "2.12.6",
+  scalafmtOnCompile in ThisBuild := true,
+  parallelExecution in Test := false,
+  licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
+  homepage := Some(url("https://www.github.com/hntd187/spotify")),
+  bintrayPackageLabels := Seq("spotify", "music"),
+  crossScalaVersions := Seq("2.11.12", "2.12.6"),
+  scalacOptions ++= Seq(
+    "-feature",
+    "-encoding",
+    "utf-8",
+    "-deprecation",
+    "-explaintypes",
+    "-language:postfixOps",
+    "-language:implicitConversions",
+    "-unchecked"
+  )
 )
+
+lazy val core = crossProject(JVMPlatform, JSPlatform)
+  .withoutSuffixFor(JVMPlatform)
+  .crossType(CrossType.Full)
+  .in(file("core"))
+  .settings(common)
+  .settings(
+    libraryDependencies ++= Seq(
+      "com.softwaremill.sttp" %%% "core"                            % sttpVersion,
+      "com.softwaremill.sttp" %%% "circe"                           % sttpVersion,
+      "com.softwaremill.sttp" %% "async-http-client-backend-future" % sttpVersion,
+      "com.outr"              %%% "scribe"                          % scribeVersion,
+      "io.circe"              %%% "circe-core"                      % circeVersion,
+      "io.circe"              %%% "circe-parser"                    % circeVersion,
+      "io.circe"              %%% "circe-generic"                   % circeVersion,
+      "org.scalatest"         %%% "scalatest"                       % scalatestVersion % Test
+    )
+  )
+  .jsSettings(browserTestSettings)
+  .jsSettings(coverageEnabled := false)

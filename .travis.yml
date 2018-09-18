@@ -1,6 +1,37 @@
+sudo: true
 language: scala
-script: "sbt clean coverage test"
-after_success: "sbt coverageReport coveralls"
+
 scala:
-   - 2.12.4
-   - 2.11.11
+   - 2.12.6
+   - 2.11.12
+
+jdk:
+  - oraclejdk8
+  - oraclejdk9
+
+env: SJS_TEST_BROWSER=chrome
+
+addons:
+  chrome: stable
+
+cache:
+  directories:
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot"
+
+before_script:
+  - wget "https://chromedriver.storage.googleapis.com/2.41/chromedriver_linux64.zip"
+  - mkdir -p chromedriver && unzip chromedriver_linux64.zip -d chromedriver/
+  - export PATH="$PATH:$PWD/chromedriver/"
+
+script:
+  - >
+    sbt ++$TRAVIS_SCALA_VERSION
+    coreJS/test
+  - >
+    sbt ++$TRAVIS_SCALA_VERSION
+    clean
+    coverage
+    core/test
+
+after_success: "sbt core/coverageReport core/coveralls"
