@@ -3,6 +3,7 @@ import org.scalajs.jsenv.selenium.SeleniumJSEnv
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 scalaVersion := "2.12.7"
+releaseIgnoreUntrackedFiles := true
 
 lazy val scalatestVersion = "3.0.5"
 lazy val sttpVersion      = "1.3.5"
@@ -28,7 +29,6 @@ lazy val common = Seq(
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://www.github.com/hntd187/spotify")),
   bintrayPackageLabels := Seq("spotify", "music"),
-  releaseIgnoreUntrackedFiles := true,
   crossScalaVersions := Seq("2.11.12", "2.12.7"),
   scalacOptions ++= Seq(
     "-feature",
