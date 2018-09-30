@@ -4,23 +4,31 @@ A Scala library for the Spotify API. The documentation on the Spotify API can be
 supports most features surrounding artists, tracks, and albums. Currently no user support is implemented. 
 
 ##### Adding to project
-`libraryDependencies += "io.scarman" %% "spotify-api" % "0.1.0"`
+`libraryDependencies += "io.scarman" %% "spotify-api" % "0.2.0"` 
+
+or if you are using scalaJS
+
+`libraryDependencies += "io.scarman" %%% "spotify-api" % "0.2.0"` 
+
 
 ##### Using the Library
 There are 2 ways to make use of this library and there are some important things to keep in mind when using this library.
 The packages of this library are separated into request and response. Not surprisingly these are for the request portion
-and response portion of the API. It's important to understand this so you use the right classes.
+and response portion of the API. It's important to understand this so you use the right classes. 
 
 ##### First use
 The first way uses the `Spotify` object directly to create requests.
-
+No matter which way you use you must have an [sttp](https://github.com/softwaremill/sttp) implicit backend in scope. Currently this API supports any
+backend implementing `Backend[Future[R], _]`, which is `AsyncHttpClientFutureBackend` for JVM usage or `FetchBackend` if you are using JS.
 ```scala
 import scala.concurrent.Future
 import io.scarman.spotify._
 import io.scarman.spotify.{response => resp}
+import com.softwaremill.sttp.asynchttpclient.future.AsyncHttpClientFutureBackend
 
 val appId = ""
 val appSecret = ""
+implicit val backend = AsyncHttpClientFutureBackend()
 
 val spotify = Spotify(appId, appSecret)
 
@@ -36,9 +44,11 @@ The second way uses the Spotify object implicitly and creates the case classes d
 import scala.concurrent.Future
 import io.scarman.spotify._
 import io.scarman.spotify.{response => resp}
+import com.softwaremill.sttp.asynchttpclient.future.AsyncHttpClientFutureBackend
 
 val appId = ""
 val appSecret = ""
+implicit val backend = AsyncHttpClientFutureBackend()
 
 implicit val spotify = Spotify(appId, appSecret)
 
@@ -55,6 +65,7 @@ make subsequent requests using information you've already provided much easier.
 
 ```scala
 import io.scarman.spotify._
+
 val artist = Artist("id")
 val albums = artist.albums()
 
@@ -63,6 +74,7 @@ val features = track.getAudioFeatures()
 ```
 
 Currently most of the non-user related API requests are implemented. This includes artists, albums, tracks. Down the road I plan to finish off the rest of the API, but I'm not sure how the user calls will fit in down the road. I'm open to suggestions on them.
+Now that I have a working JS implementation it will probably make sense implement the rest of the api for more user driven JS applications to make use of.
 
 #### Contact
 Stephen Carman <shcarman@gmail.com>
