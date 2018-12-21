@@ -2,13 +2,14 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.scalajs.jsenv.selenium.SeleniumJSEnv
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
-scalaVersion := "2.12.7"
-releaseIgnoreUntrackedFiles := true
+lazy val scalalibraryVersion = "2.12.8"
+lazy val scalatestVersion    = "3.0.5"
+lazy val sttpVersion         = "1.5.2"
+lazy val circeVersion        = "0.11.0"
+lazy val scribeVersion       = "2.7.1"
 
-lazy val scalatestVersion = "3.0.5"
-lazy val sttpVersion      = "1.3.5"
-lazy val circeVersion     = "0.10.0"
-lazy val scribeVersion    = "2.6.0"
+scalaVersion := scalalibraryVersion
+releaseIgnoreUntrackedFiles := true
 
 lazy val browserTestSettings = Seq(
   jsEnv in Test := {
@@ -23,13 +24,13 @@ lazy val browserTestSettings = Seq(
 lazy val common = Seq(
   name := "spotify-api",
   organization := "io.scarman",
-  scalaVersion := "2.12.7",
+  scalaVersion := scalalibraryVersion,
   scalafmtOnCompile in ThisBuild := true,
   parallelExecution in Test := false,
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
   homepage := Some(url("https://www.github.com/hntd187/spotify")),
   bintrayPackageLabels := Seq("spotify", "music"),
-  crossScalaVersions := Seq("2.11.12", "2.12.7"),
+  crossScalaVersions := Seq("2.11.12", scalalibraryVersion),
   scalacOptions ++= Seq(
     "-feature",
     "-encoding",
