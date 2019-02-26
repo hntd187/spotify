@@ -4,9 +4,9 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 lazy val scalalibraryVersion = "2.12.8"
 lazy val scalatestVersion    = "3.0.5"
-lazy val sttpVersion         = "1.5.2"
-lazy val circeVersion        = "0.11.0"
-lazy val scribeVersion       = "2.7.1"
+lazy val sttpVersion         = "1.5.11"
+lazy val circeVersion        = "0.11.1"
+lazy val scribeVersion       = "2.7.2"
 
 scalaVersion := scalalibraryVersion
 releaseIgnoreUntrackedFiles := true
@@ -62,3 +62,24 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
   )
   .jsSettings(browserTestSettings)
   .jsSettings(coverageEnabled := false)
+
+lazy val example = project
+  .in(file("example-scalajs-app"))
+  .settings(common)
+  .settings(scalaJSUseMainModuleInitializer := true)
+  .settings(
+    name := "example-app",
+    resolvers += Resolver.jcenterRepo,
+    libraryDependencies ++= Seq(
+      "com.lihaoyi"                  %%% "scalatags"         % "0.6.7",
+      "com.github.japgolly.scalacss" %%% "core"              % "0.5.5",
+      "com.github.japgolly.scalacss" %%% "ext-scalatags"     % "0.5.5",
+      "org.scala-js"                 %%% "scalajs-java-time" % "0.2.5"
+    ),
+    jsEnv := {
+      val options = new ChromeOptions().addArguments("disable-web-security", "start-maximized").setHeadless(false)
+      new SeleniumJSEnv(options, SeleniumJSEnv.Config().withKeepAlive(true))
+    }
+  )
+  .enablePlugins(ScalaJSPlugin)
+  .dependsOn(core.js)

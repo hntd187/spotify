@@ -15,7 +15,8 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify,
                                                d: Decoder[R],
                                                backend: SttpBackend[Future, Nothing],
                                                val execution: ExecutionContext = ExecutionContext.Implicits.global)
-    extends Logging {
+    extends Logging
+    with MediaTypes {
 
   protected val reqUri: Uri
   protected val request: Req[R] = sttp.get(reqUri).response(asJson[R])
@@ -36,7 +37,7 @@ private[spotify] abstract class HttpRequest[R](implicit spotify: Spotify,
   protected def get(req: Req[R]): Future[R] = {
     logger.debug(s"Request made for URL: ${req.uri}")
     spotify.getToken.flatMap { t =>
-      val authReq = req.headers(("Authorization", s"Bearer $t"), ("Content-Type", "application/json"))
+      val authReq = req.auth.bearer(t).contentType(Json)
       val resp    = authReq.send()
       resp.map { r =>
         toJson(r) match {

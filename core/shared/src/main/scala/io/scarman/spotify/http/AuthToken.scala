@@ -1,7 +1,5 @@
 package io.scarman.spotify.http
 
-import java.util.Base64
-
 import com.softwaremill.sttp._
 import com.softwaremill.sttp.circe._
 import io.circe.generic.auto._
@@ -21,26 +19,23 @@ abstract class AuthToken(implicit backend: SttpBackend[Future, Nothing], executi
 
   private val baseRequest: Req[AccessToken] = sttp
     .post(Token)
-    .header(ContentType, Form)
+    .contentType(Form)
     .response(asJson[AccessToken])
     .body(baseBody)
 
-  private def base64(id: String, secret: String): String = {
-    Base64.getEncoder.encodeToString(s"$id:$secret".getBytes)
-  }
-
   private def tokenRequest(req: Req[AccessToken]): Future[AccessToken] = {
     req.send().map(_.body).map {
-      case Right(Right(at)) => at
+      case Right(Right(at)) =>
+        logger.info(s"Auth Token: ${at.access_token}")
+        at
       case Right(Left(err)) => throw new Exception(s"Can't get auth token: $req\n$err")
       case Left(err)        => throw new Exception(s"Can't get auth token: $req\n$err")
     }
   }
 
   protected def getToken(id: String, secret: String, previous: Option[AccessToken] = None): Future[AccessToken] = {
-    val authHeader: String        = base64(id, secret)
-    val request: Req[AccessToken] = baseRequest.header(Authorization, s"Basic $authHeader")
-    logger.debug(s"Requesting token for $authHeader")
+    val request: Req[AccessToken] = baseRequest.auth.basic(id, secret)
+    logger.debug(s"Headers: ${request.headers.map { case (k, v) => s"$k=$v" }.mkString(", ")}")
     tokenRequest(request)
   }
 
