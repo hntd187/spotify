@@ -16,7 +16,7 @@ import scala.concurrent.Future
   * @param offset
   * @param spotify
   */
-case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5)(implicit spotify: Spotify,
+case class AlbumTracks(id: String, market: String = "ES", limit: Int = 10, offset: Int = 5)(implicit auth: Authorization,
                                                                                             val backend: SttpBackend[Future, Nothing])
     extends HttpRequest[TrackPage] {
 

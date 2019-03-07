@@ -7,6 +7,7 @@ import scala.concurrent.Future
 
 package object http {
   type Req[R]     = RequestT[Id, Either[DeserializationError[Error], R], Nothing]
+  type StrReq     = RequestT[Id, String, Nothing]
   type Resp[R]    = Future[Response[Either[DeserializationError[Error], R]]]
   type NoFResp[R] = Response[Either[DeserializationError[Error], R]]
 }

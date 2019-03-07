@@ -10,14 +10,17 @@ package object request {
   type AlbumPage = r.Paging[r.ArtistAlbum]
   type TrackPage = r.Paging[r.Track]
 
-  val base  = uri"https://api.spotify.com/v1/"
-  val Token = uri"https://accounts.spotify.com/api/token"
-  val AB    = "albums"
-  val AR    = "artists"
-  val TR    = "tracks"
-  val AF    = "audio-features"
-  val AA    = "audio-analysis"
+  val base     = uri"https://api.spotify.com/v1/"
+  val acc      = uri"https://accounts.spotify.com"
+  val tokenUri = uri"$acc/api/token"
+  val authUri  = uri"$acc/authorize"
+  val AB       = "albums"
+  val AR       = "artists"
+  val TR       = "tracks"
+  val AF       = "audio-features"
+  val AA       = "audio-analysis"
 
+  implicit val atokd: Decoder[r.AccessToken] = deriveDecoder
   implicit val d: Decoder[r.Album]           = deriveDecoder
   implicit val ad: Decoder[r.Artist]         = deriveDecoder
   implicit val eu: Decoder[r.ExternalUrl]    = deriveDecoder

@@ -3,6 +3,7 @@ package io.scarman.spotify.response
 import com.softwaremill.sttp._
 import io.circe.Decoder
 import io.scarman.spotify.Spotify
+import io.scarman.spotify.http.Authorization
 import io.scarman.spotify.request.RequestPage
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -15,7 +16,7 @@ case class Paging[T](href: String, items: List[T], limit: Int, next: Option[Stri
                                           execution: ExecutionContext): Option[Future[Paging[T]]] = {
     for {
       uri <- u
-      rp  = RequestPage(uri"$uri")
+      rp  = RequestPage(uri"$uri")(s.auth, b, d)
     } yield rp()
   }
 

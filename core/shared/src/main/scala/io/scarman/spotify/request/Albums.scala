@@ -2,7 +2,7 @@ package io.scarman.spotify.request
 
 import com.softwaremill.sttp._
 import io.scarman.spotify._
-import io.scarman.spotify.http.HttpRequest
+import io.scarman.spotify.http.{Authorization, HttpRequest}
 
 import scala.concurrent.Future
 
@@ -16,7 +16,7 @@ import scala.concurrent.Future
   * @param offset
   * @param spotify
   */
-case class Albums(ids: List[String], market: String = "ES", limit: Int = 10, offset: Int = 0)(implicit spotify: Spotify,
+case class Albums(ids: List[String], market: String = "ES", limit: Int = 10, offset: Int = 0)(implicit auth: Authorization,
                                                                                               backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Albums] {
 

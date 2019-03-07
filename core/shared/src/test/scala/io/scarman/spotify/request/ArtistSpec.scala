@@ -22,7 +22,7 @@ class ArtistSpec extends UnitSpec {
       val relatedDudes = related()
 
       relatedDudes.map(_().head.name shouldBe "Flo Rida")
-      relatedDudes.map(_().last.name shouldBe "Madcon")
+      relatedDudes.map(_().last.name shouldBe "Wisin")
     }
 
     it("Should get Pitbull's platinum albums") {

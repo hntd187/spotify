@@ -13,7 +13,7 @@ releaseIgnoreUntrackedFiles := true
 
 lazy val browserTestSettings = Seq(
   jsEnv in Test := {
-    val debugging = false
+    val debugging = true
     val options = new ChromeOptions()
       .addArguments("auto-open-devtools-for-tabs", "disable-web-security")
       .setHeadless(!debugging)
@@ -66,20 +66,20 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
 lazy val example = project
   .in(file("example-scalajs-app"))
   .settings(common)
-  .settings(scalaJSUseMainModuleInitializer := true)
   .settings(
     name := "example-app",
+    scalaJSUseMainModuleInitializer := true,
+    mainClass in Compile := Some("io.scarman.spotify.ExampleApp"),
     resolvers += Resolver.jcenterRepo,
     libraryDependencies ++= Seq(
-      "com.lihaoyi"                  %%% "scalatags"         % "0.6.7",
-      "com.github.japgolly.scalacss" %%% "core"              % "0.5.5",
-      "com.github.japgolly.scalacss" %%% "ext-scalatags"     % "0.5.5",
-      "org.scala-js"                 %%% "scalajs-java-time" % "0.2.5"
+      "com.lihaoyi" %%% "scalatags" % "0.6.7"
     ),
     jsEnv := {
-      val options = new ChromeOptions().addArguments("disable-web-security", "start-maximized").setHeadless(false)
+      val options =
+        new ChromeOptions().addArguments("auto-open-devtools-for-tabs", "disable-web-security", "start-maximized").setHeadless(false)
       new SeleniumJSEnv(options, SeleniumJSEnv.Config().withKeepAlive(true))
-    }
+    },
+    artifactPath in (Compile, fastOptJS) := file("C:\\Users\\Stephen Carman\\software\\nginx-1.15.9\\html\\app-example.js")
   )
   .enablePlugins(ScalaJSPlugin)
   .dependsOn(core.js)
