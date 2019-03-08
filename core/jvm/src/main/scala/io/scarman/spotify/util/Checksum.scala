@@ -9,22 +9,22 @@ import scribe.Logging
   */
 object Checksum extends Logging {
 
-  private val md: MessageDigest = MessageDigest.getInstance("SHA-1")
+  private val md: MessageDigest = MessageDigest.getInstance("SHA-256")
 
-  def SHA1Sum(bytes: Array[Byte]): Array[Byte] = md.digest(bytes)
+  def SHA256Sum(bytes: Array[Byte]): Array[Byte] = md.digest(bytes)
 
   implicit def bytesToSha(bytes: Array[Byte]): String = bytes.string
 
-  implicit class RichSha1(sha: Array[Byte]) {
+  implicit class RichSha256(sha: Array[Byte]) {
     def string: String = {
       val formatter = new StringBuilder()
       sha.foreach { b =>
         formatter.append(f"$b%02x")
       }
-      logger.debug(s"SHA1 sum is ${formatter.result()}")
+      logger.debug(s"SHA256 sum is ${formatter.result()}")
       formatter.result()
     }
-    def sha1: Array[Byte] = Checksum.SHA1Sum(sha)
+    def sha256: Array[Byte] = Checksum.SHA256Sum(sha)
   }
 
 }

@@ -15,7 +15,7 @@ trait FileRequest extends Logging {
     val file = Paths.get(outputLocation)
     sttp.get(uri"$fileUrl").response(asPath(file, overwrite = true)).send().map { response =>
       if (response.is200) {
-        DownloadResults(Some(Files.readAllBytes(file).sha1), Downloaded)
+        DownloadResults(Some(Files.readAllBytes(file).sha256), Downloaded)
       } else {
         DownloadResults(None, Failed(response.statusText))
       }
