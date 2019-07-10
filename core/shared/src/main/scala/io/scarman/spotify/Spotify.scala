@@ -22,13 +22,13 @@ class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future,
     extends Logging {
 
   def getArtist(id: String, market: String = "ES"): Artist = Artist(id, market)(auth, backend)
-  def getAlbum(id: String, market: String = "ES"): Album   = Album(id, market)(auth, backend)
-  def getTrack(id: String, market: String = "ES"): Track   = Track(id, market)(auth, backend)
-  def getArtists(ids: String*): Artists                    = getArtists(ids.toList)
-  def getAlbums(ids: String*): Albums                      = getAlbums(ids.toList)
-  def getTracks(ids: String*): Tracks                      = getTracks(ids.toList)
-  def getAudioFeatures(id: String): AudioFeatures          = AudioFeatures(id)(auth, backend)
-  def getAudioAnalysis(id: String): AudioAnalysis          = AudioAnalysis(id)(auth, backend)
+  def getAlbum(id: String, market: String  = "ES"): Album  = Album(id, market)(auth, backend)
+  def getTrack(id: String, market: String  = "ES"): Track  = Track(id, market)(auth, backend)
+  def getArtists(ids: String*): Artists           = getArtists(ids.toList)
+  def getAlbums(ids: String*): Albums             = getAlbums(ids.toList)
+  def getTracks(ids: String*): Tracks             = getTracks(ids.toList)
+  def getAudioFeatures(id: String): AudioFeatures = AudioFeatures(id)(auth, backend)
+  def getAudioAnalysis(id: String): AudioAnalysis = AudioAnalysis(id)(auth, backend)
 
   def getArtists(ids: List[String], limit: Int = 10, offset: Int = 0): Artists = {
     Artists(ids, limit, offset)(auth, backend)
@@ -47,10 +47,10 @@ class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future,
   }
 
   def getArtistAlbums(id: String,
-                      market: String = "ES",
+                      market: String                 = "ES",
                       albumType: List[BaseAlbumType] = AlbumTypes.default,
-                      limit: Int = 10,
-                      offset: Int = 0): ArtistAlbums = {
+                      limit: Int                     = 10,
+                      offset: Int                    = 0): ArtistAlbums = {
     ArtistAlbums(id, market, albumType, limit, offset)(auth, backend)
   }
 }
