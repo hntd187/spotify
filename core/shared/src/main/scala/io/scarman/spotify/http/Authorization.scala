@@ -6,7 +6,7 @@ import scala.concurrent.Future
 
 trait Authorization {
 
-  def initToken(id: String, secret: String): Future[AccessToken]
+  protected def initToken(id: String, secret: String): Future[AccessToken]
 
   def getToken: Future[AccessToken]
 

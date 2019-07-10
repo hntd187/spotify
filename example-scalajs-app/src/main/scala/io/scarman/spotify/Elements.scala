@@ -2,16 +2,21 @@ package io.scarman.spotify
 
 import java.util.concurrent.TimeUnit
 
-import scalatags.Text.all._
+import io.scarman.spotify.http.Authorization
+import org.scalajs.dom.html.Div
+import scalatags.JsDom
+import scalatags.JsDom.all._
 
 import scala.concurrent.duration.Duration
 
 object Elements {
-  def searchBar(default: String) = div(
-    `class` := "input-group mb-3 mx-auto w-25",
-    div(`class` := "input-group-prepend", button(`class` := "btn btn-dark btn-sm", `type` := "button", "Search")),
-    input(`type` := "text", `class` := "form-control", value := default)
-  )
+
+  def searchDropdown(default: String)(implicit auth: Authorization): JsDom.TypedTag[Div] = {
+    val mast = a(href := "#", `class` := "text-center list-group-item list-group-item-action list-group-item-dark", "Mastodon").render
+    val pit  = a(href := "#", `class` := "text-center list-group-item list-group-item-action list-group-item-dark", "Pitbull").render
+
+    div(`class` := "list-group list-group-horizontal mb-3 mx-auto w-25", mast, pit)
+  }
 
   def cleanDuration(i: Long) = {
     val base    = Duration(i, TimeUnit.MILLISECONDS)

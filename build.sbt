@@ -3,10 +3,10 @@ import org.scalajs.jsenv.selenium.SeleniumJSEnv
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 lazy val scalalibraryVersion = "2.12.8"
-lazy val scalatestVersion    = "3.0.5"
-lazy val sttpVersion         = "1.5.11"
-lazy val circeVersion        = "0.11.1"
-lazy val scribeVersion       = "2.7.2"
+lazy val scalatestVersion    = "3.0.8"
+lazy val sttpVersion         = "1.6.1"
+lazy val circeVersion        = "0.12.0-M3"
+lazy val scribeVersion       = "2.7.8"
 
 scalaVersion := scalalibraryVersion
 releaseIgnoreUntrackedFiles := true
@@ -57,11 +57,12 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
       "io.circe"              %%% "circe-core"                      % circeVersion,
       "io.circe"              %%% "circe-parser"                    % circeVersion,
       "io.circe"              %%% "circe-generic"                   % circeVersion,
-      "org.scalatest"         %%% "scalatest"                       % scalatestVersion % Test
+      "org.scalatest"         %%% "scalatest"                       % scalatestVersion % Test,
     )
   )
   .jsSettings(browserTestSettings)
   .jsSettings(coverageEnabled := false)
+  .jsSettings(scalacOptions += "-P:scalajs:sjsDefinedByDefault")
 
 lazy val example = project
   .in(file("example-scalajs-app"))
@@ -69,14 +70,16 @@ lazy val example = project
   .settings(
     name := "example-app",
     scalaJSUseMainModuleInitializer := true,
+    scalaJSLinkerConfig ~= { _.withESFeatures(_.withUseECMAScript2015(true)) },
     mainClass in Compile := Some("io.scarman.spotify.ExampleApp"),
     resolvers += Resolver.jcenterRepo,
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "scalatags" % "0.6.7"
+      "com.lihaoyi"       %%% "scalatags"       % "0.6.8",
+      "io.github.cquiroz" %%% "scala-java-time" % "2.0.0-RC3"
     ),
     jsEnv := {
       val options =
-        new ChromeOptions().addArguments("auto-open-devtools-for-tabs", "disable-web-security", "start-maximized").setHeadless(false)
+        new ChromeOptions().addArguments("auto-open-devtools-for-tabs", "disable-web-security", "start-maximized").setHeadless(true)
       new SeleniumJSEnv(options, SeleniumJSEnv.Config().withKeepAlive(true))
     },
     artifactPath in (Compile, fastOptJS) := file("C:\\Users\\Stephen Carman\\software\\nginx-1.15.9\\html\\app-example.js")

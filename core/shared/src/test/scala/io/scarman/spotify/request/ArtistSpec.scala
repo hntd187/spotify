@@ -22,13 +22,12 @@ class ArtistSpec extends UnitSpec {
       val relatedDudes = related()
 
       relatedDudes.map(_().head.name shouldBe "Flo Rida")
-      relatedDudes.map(_().last.name shouldBe "Wisin")
+      relatedDudes.map(_().last.name shouldBe "Madcon")
     }
 
     it("Should get Pitbull's platinum albums") {
       val request = spotify.getArtist(id = "0TnOYISbd1XYRBk9myaseg").albums(fullalbum)
       val albums  = request()
-//      val nextPage = request.nextPage()
 
       albums.map { a =>
         a.items.head.name shouldBe "Climate Change"
