@@ -8,6 +8,9 @@ scala:
 jdk:
   - oraclejdk8
   - oraclejdk9
+  - oraclejdk10
+  - oraclejdk11
+  - oraclejdk12
 
 env: SJS_TEST_BROWSER=chrome
 
@@ -20,7 +23,8 @@ cache:
   - "$HOME/.sbt/boot"
 
 before_script:
-  - echo "Getting Chrome Driver: https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip"
+  - >
+    echo "Getting Chrome Driver: https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip"
   - wget "https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE)/chromedriver_linux64.zip"
   - mkdir -p chromedriver && unzip chromedriver_linux64.zip -d chromedriver/
   - export PATH="$PATH:$PWD/chromedriver/"
