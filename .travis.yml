@@ -1,9 +1,13 @@
 sudo: true
 language: scala
 
+matrix:
+  allow_failures:
+    - scala: 2.13.0
+
 scala:
    - 2.12.8
-   - 2.11.12
+   - 2.13.0
 
 jdk:
   - oraclejdk8
