@@ -13,7 +13,7 @@ releaseIgnoreUntrackedFiles := true
 
 lazy val browserTestSettings = Seq(
   jsEnv in Test := {
-    val debugging = true
+    val debugging = false
     val options = new ChromeOptions()
       .addArguments("auto-open-devtools-for-tabs", "disable-web-security")
       .setHeadless(!debugging)
@@ -77,11 +77,7 @@ lazy val example = project
     libraryDependencies ++= Seq(
       "com.lihaoyi"       %%% "scalatags"       % "0.6.8"
     ),
-    jsEnv := {
-      val options =
-        new ChromeOptions().addArguments("auto-open-devtools-for-tabs", "disable-web-security", "start-maximized").setHeadless(true)
-      new SeleniumJSEnv(options, SeleniumJSEnv.Config().withKeepAlive(true))
-    },
+    test in Test := {},
     artifactPath in (Compile, fastOptJS) := file("C:\\Users\\Stephen Carman\\software\\nginx-1.15.9\\html\\app-example.js")
   )
   .enablePlugins(ScalaJSPlugin)
