@@ -2,7 +2,7 @@ package io.scarman.spotify.request
 
 import com.softwaremill.sttp._
 import io.scarman.spotify.http.{Authorization, HttpRequest}
-import io.scarman.spotify.{Spotify, response}
+import io.scarman.spotify.response
 
 import scala.concurrent.Future
 
@@ -11,7 +11,6 @@ import scala.concurrent.Future
   * https://developer.spotify.com/web-api/get-audio-analysis/
   *
   * @param id
-  * @param spotify
   */
 case class AudioAnalysis(id: String)(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.AudioAnalysis] {

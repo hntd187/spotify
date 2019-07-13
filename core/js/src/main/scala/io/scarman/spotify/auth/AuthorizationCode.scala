@@ -13,8 +13,17 @@ import scala.concurrent.{ExecutionContext, Future}
 
 case class AuthorizationCode(id: String, scope: String, redirectUri: String, showDialog: Boolean = false) {
 
-  private val params =
-    Map("client_id" -> id, "response_type" -> "token", "redirect_uri" -> redirectUri, "scope" -> scope, "show_dialog" -> showDialog)
+  implicit def uriAsString(uri: Uri): String = {
+    uri.toString()
+  }
+
+  private val params = Map(
+    "client_id"     -> id,
+    "response_type" -> "token",
+    "redirect_uri"  -> redirectUri,
+    "scope"         -> scope,
+    "show_dialog"   -> showDialog
+  )
 
   def getAccessToken: String = {
     val urlParams = AuthorizationCode.parseUrl(window.location.href)
@@ -24,7 +33,7 @@ case class AuthorizationCode(id: String, scope: String, redirectUri: String, sho
     }
   }
 
-  def authUrl(): Uri = {
+  def authUrl(): String = {
     uri"$authUri/?$params"
   }
 }

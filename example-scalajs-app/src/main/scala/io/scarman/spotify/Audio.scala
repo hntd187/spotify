@@ -27,7 +27,6 @@ object Audio {
     audioTag.volume = 0.25
     audioTag.play()
     element.innerHTML = i(`class` := "material-icons md-24", onclick := s"pauseSound('$ele')", "pause").render
-
   }
 
   @JSExportTopLevel("playSound")

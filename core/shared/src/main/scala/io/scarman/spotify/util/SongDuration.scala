@@ -6,7 +6,7 @@ import scala.concurrent.duration._
   * Some API calls name the duration of the song duration_ms
   */
 trait SongDuration {
-  val duration_ms: Int
+  val duration_ms: Long
   def getDuration: Duration = Duration(duration_ms, MILLISECONDS)
 }
 

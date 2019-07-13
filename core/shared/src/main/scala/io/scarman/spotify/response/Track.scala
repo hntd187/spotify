@@ -5,7 +5,7 @@ import io.scarman.spotify.util.SongDuration
 case class Track(artists: List[Artist],
                  //available_markets: List[String],
                  disc_number: Int,
-                 duration_ms: Int,
+                 duration_ms: Long,
                  explicit: Boolean,
                  external_urls: Option[ExternalUrl],
                  href: String,

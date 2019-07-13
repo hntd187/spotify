@@ -16,7 +16,8 @@ case class ClientCredentials(appId: String, appSecret: String)(implicit backend:
                                                                execution: ExecutionContext = ExecutionContext.Implicits.global)
     extends Authorization {
 
-  private val baseBody                                            = ("grant_type", "client_credentials")
+  private val baseBody = ("grant_type", "client_credentials")
+
   lazy private val tokenRef: AtomicReference[Future[AccessToken]] = new AtomicReference[Future[AccessToken]](initToken(appId, appSecret))
 
   private val baseRequest: Req[AccessToken] = sttp

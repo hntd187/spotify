@@ -18,6 +18,6 @@ case class AudioFeatures(danceability: Double,
                          uri: String,
                          track_href: String,
                          analysis_url: String,
-                         duration_ms: Int,
+                         duration_ms: Long,
                          time_signature: Int)
     extends SongDuration
