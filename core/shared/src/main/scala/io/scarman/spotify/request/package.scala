@@ -7,8 +7,10 @@ import io.scarman.spotify.http.{DownloadResult, DownloadResults}
 import io.scarman.spotify.{response => r}
 
 package object request {
-  type AlbumPage = r.Paging[r.ArtistAlbum]
-  type TrackPage = r.Paging[r.Track]
+  type AlbumPage    = r.Paging[r.ArtistAlbum]
+  type TrackPage    = r.Paging[r.Track]
+  type ArtistPage   = r.Paging[r.Artist]
+  type PlaylistPage = r.Paging[r.Playlist]
 
   val base     = uri"https://api.spotify.com/v1/"
   val acc      = uri"https://accounts.spotify.com"
@@ -42,9 +44,15 @@ package object request {
   implicit val aatd: Decoder[r.ArtistAlbum]  = deriveDecoder
   implicit val apd: Decoder[AlbumPage]       = deriveDecoder
   implicit val tpd: Decoder[TrackPage]       = deriveDecoder
+  implicit val artpd: Decoder[ArtistPage]    = deriveDecoder
+  implicit val ppd: Decoder[PlaylistPage]    = deriveDecoder
   implicit val trd: Decoder[r.Tracks]        = deriveDecoder
   implicit val asd: Decoder[r.Albums]        = deriveDecoder
   implicit val ars: Decoder[r.Artists]       = deriveDecoder
   implicit val tld: Decoder[r.TrackLink]     = deriveDecoder
   implicit val sadd: Decoder[r.SimpleAlbum]  = deriveDecoder
+  implicit val plrd: Decoder[r.Playlist]     = deriveDecoder
+  implicit val urd: Decoder[r.User]          = deriveDecoder
+  implicit val srd: Decoder[r.SearchResults] = deriveDecoder
+
 }

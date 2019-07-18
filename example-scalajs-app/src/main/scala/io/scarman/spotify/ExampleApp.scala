@@ -5,9 +5,10 @@ import java.util.concurrent.TimeUnit
 import com.softwaremill.sttp._
 import io.scarman.spotify.auth._
 import io.scarman.spotify.http.Authorization
+import io.scarman.spotify.request.Search
 import org.scalajs.dom._
-import org.scalajs.dom.html.{Div, Input, LI}
-import scalatags.JsDom.TypedTag
+import org.scalajs.dom.html._
+import scalatags.JsDom._
 import scalatags.JsDom.all._
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -38,17 +39,34 @@ object ExampleApp {
   @JSExportTopLevel("getAlbum")
   def getAlbum(elem: String, id: String): Unit = reqAlbum(elem, id)
 
+  def createAlbumCard(album: response.Album): TypedTag[Div] = {
+    val i = document.getElementById("idButton")
+    if (i != null) {
+      i.asInstanceOf[Input].value = album.name
+    }
+    val artwork = div(
+      `class`    := "card mx-auto w-25 p-0",
+      attr("id") := "results-container",
+      style      := "margin-top: -15px",
+      ul(`class` := "list-group list-group-flush", attr("id") := "results")
+    )
+    val tracks = div(
+      `class` := "card text-white bg-dark mb-3 w-25 mx-auto",
+      img(src     := album.images.head.asInstanceOf[response.Image].url, `class` := "card-img-top"),
+      div(`class` := "card-body", h5(`class` := "card-title", album.name), "By: ", album.artists.map(_.name).mkString(", ")),
+      ul(`class`  := "list-group list-group-flush", for (track <- album.tracks.items) yield createItem(track))
+    )
+    div(artwork, tracks)
+  }
+
+  @JSExportTopLevel("reqAlbum")
   def reqAlbum(elem: String, id: String): Future[response.Album] = {
     val album_fut = Album(id)
-    val search    = searchBar(id)
+
     album_fut().andThen {
       case Success(album) =>
-        document.getElementById(elem).innerHTML = br + search.toString + div(
-          `class` := "card text-white bg-dark mb-3 w-25 mx-auto",
-          img(src := album.images.head.asInstanceOf[response.Image].url, `class` := "card-img-top"),
-          div(`class` := "card-body", h5(`class` := "card-title", album.name), "By: ", album.artists.map(_.name).mkString(", ")),
-          ul(`class` := "list-group list-group-flush", for (track <- album.tracks.items) yield createItem(track))
-        ).toString()
+        document.getElementById(elem).innerHTML = div(br, searchBar(album.name), createAlbumCard(album)).toString()
+        focusChange("results-container", "none")
       case Failure(exception) => throw exception
     }
   }
@@ -56,14 +74,8 @@ object ExampleApp {
   def searchBar(v: String): TypedTag[Div] = {
     val buttonDiv =
       div(`class` := "input-group-prepend", button(`class` := "btn btn-outline-secondary", onclick := "getSearchAlbum()", "Find"))
-    val inputBox = input(`type` := "text", `class` := "form-control", id := "idButton", value := v)
+    val inputBox = input(value := v, `type` := "text", `class` := "form-control", id := "idButton", onkeyup := "taEvent(false)")
     div(`class` := "list-group list-group-horizontal mb-3 mx-auto w-25", inputBox, buttonDiv)
-  }
-
-  def searchDropdown(): TypedTag[Div] = {
-    val mast = a(href := "#", `class` := buttonClass, "Mastodonn", onclick := s"""getAlbum("body", "$schpoopy_mastodon_album")""")
-    val pit  = a(href := "#", `class` := buttonClass, "Pitbull", onclick := s"""getAlbum("body", "$sweet_pitbull_album")""")
-    div(`class` := "list-group list-group-horizontal mb-3 mx-auto w-25", mast, pit)
   }
 
   def cleanDuration(i: Long): String = {
@@ -82,6 +94,34 @@ object ExampleApp {
       for (preview <- track.preview_url)
         yield span(id := eleId, i(`class` := "material-icons md-24", onclick := s"playSound('$eleId', '$preview')", "play_circle_filled"))
     )
+  }
+
+  @JSExportTopLevel("focusChange")
+  def focusChange(e: String, f: String): Unit = {
+    val ele = document.getElementById(e)
+    if (ele != null) {
+      ele.asInstanceOf[Div].style.display = f
+    }
+  }
+
+  @JSExportTopLevel("taEvent")
+  def taEvent(clear: Boolean = false): Unit = {
+    if (clear) return
+
+    val t = document.getElementById("idButton")
+    if (t != null) {
+      val s = Search(s"album:${t.asInstanceOf[Input].value}", "album", limit = 5)
+      s().onComplete {
+        case Success(v) =>
+          val list  = document.getElementById("results")
+          val items = v.albums.map(_.items.map(a => (a.id, a.name))).getOrElse(List.empty[(String, String)])
+          list.innerHTML = items
+            .map(i => ul(`class` := buttonClass, onclick := s"reqAlbum('body','${i._1}')", i._2))
+            .mkString("")
+          focusChange("results-container", "block")
+        case Failure(_) =>
+      }
+    }
   }
 
   def main(args: Array[String]): Unit = {

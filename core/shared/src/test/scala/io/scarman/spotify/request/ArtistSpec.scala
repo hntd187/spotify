@@ -38,7 +38,7 @@ class ArtistSpec extends UnitSpec {
       val aa           = artistAlbums()
       val np           = aa.flatMap(_.nextPage())
       for { f <- np } {
-        f.total shouldBe 23
+        f.total shouldBe 29
       }
 
       aa.map { a =>

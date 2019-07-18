@@ -13,7 +13,7 @@ import scala.concurrent.Future
   * @param id
   * @param market
   */
-case class Track(id: String, market: String = "ES")(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
+case class Track(id: String, market: String = "US")(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
     extends HttpRequest[r.Track] {
 
   lazy protected val reqUri = uri"$base$TR/$id".param("market", market)

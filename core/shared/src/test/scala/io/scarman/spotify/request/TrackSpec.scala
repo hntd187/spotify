@@ -68,8 +68,8 @@ class TrackSpec extends UnitSpec {
       val tracks = spotify.getTracks("6OmhkSOpvYBokMKQxpIGx2", "1zHlj4dQ8ZAtrayhuDDmkY")
       tracks().map { result =>
         result.tracks should have length 2
-        result.tracks.head.name shouldBe "Global Warming"
-        result.tracks.last.name shouldBe "Timber"
+        result.tracks.head.name shouldBe "Global Warming (feat. Sensato)"
+        result.tracks.last.name shouldBe "Timber (feat. Ke$ha)"
       }
     }
 
