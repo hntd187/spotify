@@ -6,7 +6,7 @@ lazy val scalalibraryVersion = "2.13.0"
 lazy val scalatestVersion    = "3.0.8"
 lazy val sttpVersion         = "1.6.3"
 lazy val circeVersion        = "0.12.0-M4"
-lazy val scribeVersion       = "2.7.8"
+lazy val scribeVersion       = "2.7.9"
 
 scalaVersion := scalalibraryVersion
 releaseIgnoreUntrackedFiles := true
