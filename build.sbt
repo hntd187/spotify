@@ -4,9 +4,9 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 lazy val scalalibraryVersion = "2.13.0"
 lazy val scalatestVersion    = "3.0.8"
-lazy val sttpVersion         = "1.6.3"
-lazy val circeVersion        = "0.12.0-M4"
-lazy val scribeVersion       = "2.7.8"
+lazy val sttpVersion         = "1.6.4"
+lazy val circeVersion        = "0.12.0-RC1"
+lazy val scribeVersion       = "2.7.9"
 
 scalaVersion := scalalibraryVersion
 releaseIgnoreUntrackedFiles := true
@@ -48,7 +48,7 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
   .settings(common)
   .settings(
     scalaVersion := "2.13.0",
-    crossScalaVersions ++= Seq("2.13.0", "2.12.8"),
+    crossScalaVersions ++= Seq("2.13.0", "2.12.9"),
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp" %%% "core"                            % sttpVersion,
       "com.softwaremill.sttp" %% "async-http-client-backend-future" % sttpVersion,
@@ -64,7 +64,7 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
   .jsSettings(browserTestSettings)
   .jsSettings(
     coverageEnabled := false,
-    scalaVersion := "2.12.8"
+    scalaVersion := "2.12.9",
   )
 
 lazy val example = project
@@ -72,7 +72,7 @@ lazy val example = project
   .settings(common)
   .settings(
     name := "example-app",
-    scalaVersion := "2.12.8",
+    scalaVersion := "2.12.9",
     scalaJSUseMainModuleInitializer := true,
     scalacOptions += "-P:scalajs:sjsDefinedByDefault",
     scalaJSLinkerConfig ~= { _.withESFeatures(_.withUseECMAScript2015(true)) },

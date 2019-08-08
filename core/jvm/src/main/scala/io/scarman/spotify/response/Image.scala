@@ -12,8 +12,8 @@ case class Image(height: Int, url: String, width: Int) {
     download(location, None)
   }
 
-  def download(location: String,
-               checksum: Option[String])(implicit backend: SttpBackend[Future, Nothing], ec: ExecutionContext): Future[DownloadResults] = {
+  def download(location: String, checksum: Option[String])(implicit backend: SttpBackend[Future, Nothing],
+                                                           ec: ExecutionContext): Future[DownloadResults] = {
     ImageDownload(url, location, checksum).download()
   }
 }
