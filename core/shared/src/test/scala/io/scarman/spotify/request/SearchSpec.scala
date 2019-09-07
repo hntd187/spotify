@@ -9,7 +9,8 @@ class SearchSpec extends UnitSpec {
       val s = spotify.search("artist:pitbull", "album")
 
       s().map { sr =>
-        sr.albums.value.items should have length 20
+        println(sr.albums.value.items.length)
+        sr.albums.value.items should have length 10
       }
     }
   }

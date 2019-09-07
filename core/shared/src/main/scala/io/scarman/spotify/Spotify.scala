@@ -14,8 +14,7 @@ import scala.concurrent.{ExecutionContext, Future}
   * provided implicitly. If you don't want to use this object implicitly it has a number of methods that
   * wrap the request case classes.
   *
-  * @param id
-  * @param secret
+  * @param auth
   */
 class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future, Nothing],
                                        val execution: ExecutionContext = ExecutionContext.Implicits.global)
@@ -29,7 +28,15 @@ class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future,
   def getTracks(ids: String*): Tracks             = getTracks(ids.toList)
   def getAudioFeatures(id: String): AudioFeatures = AudioFeatures(id)(auth, backend)
   def getAudioAnalysis(id: String): AudioAnalysis = AudioAnalysis(id)(auth, backend)
-  def search(q: String, cat: String): Search      = Search(q, cat)(auth, backend)
+
+  def search(q: String,
+             cat: String,
+             market: String                   = "US",
+             limit: Int                       = 10,
+             offset: Int                      = 0,
+             include_external: Option[String] = None): Search = {
+    Search(q, cat, market, limit, offset, include_external)(auth, backend)
+  }
 
   def getArtists(ids: List[String], limit: Int = 10, offset: Int = 0): Artists = {
     Artists(ids, limit, offset)(auth, backend)

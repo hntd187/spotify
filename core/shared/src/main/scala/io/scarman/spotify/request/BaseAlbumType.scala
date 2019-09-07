@@ -1,6 +1,6 @@
 package io.scarman.spotify.request
 
-sealed trait BaseAlbumType
+protected[spotify] sealed trait BaseAlbumType
 
 case object single extends BaseAlbumType
 

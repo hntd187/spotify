@@ -12,7 +12,6 @@ import scala.concurrent.Future
   *
   * @param id
   * @param market
-  * @param spotify
   */
 case class Album(id: String, market: String = "ES")(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
     extends HttpRequest[response.Album] {

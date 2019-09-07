@@ -7,7 +7,8 @@ case class AccessToken(access_token: String,
                        refresh_token: Option[String],
                        state: Option[String]) {
 
-  private val expiresOn  = (System.currentTimeMillis() / 1000) + expires_in
+  private val expiresOn = (System.currentTimeMillis() / 1000) + expires_in
+
   def isExpired: Boolean = System.currentTimeMillis() / 1000 > expiresOn
 
 }
