@@ -25,10 +25,9 @@ object Scopes {
     val All           = s"$RemoteControl $Streaming"
   }
   object Users {
-    val ReadBirthdate = "user-read-birthdate"
-    val ReadEmail     = "user-read-email"
-    val ReadPrivate   = "user-read-private"
-    val All           = s"$ReadBirthdate $ReadEmail $ReadPrivate"
+    val ReadEmail   = "user-read-email"
+    val ReadPrivate = "user-read-private"
+    val All         = s"$ReadEmail $ReadPrivate"
   }
   object Follow {
     val FollowRead   = "user-follow-read"
