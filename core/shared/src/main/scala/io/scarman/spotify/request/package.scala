@@ -11,6 +11,7 @@ package object request {
   type TrackPage    = r.Paging[r.Track]
   type ArtistPage   = r.Paging[r.Artist]
   type PlaylistPage = r.Paging[r.Playlist]
+  type CategoryPage = r.Paging[r.Category]
 
   val base     = uri"https://api.spotify.com/v1/"
   val acc      = uri"https://accounts.spotify.com"
@@ -47,12 +48,17 @@ package object request {
   implicit val artpd: Decoder[ArtistPage]    = deriveDecoder
   implicit val ppd: Decoder[PlaylistPage]    = deriveDecoder
   implicit val trd: Decoder[r.Tracks]        = deriveDecoder
+  implicit val trr: Decoder[r.TracksRef]     = deriveDecoder
   implicit val asd: Decoder[r.Albums]        = deriveDecoder
   implicit val ars: Decoder[r.Artists]       = deriveDecoder
   implicit val tld: Decoder[r.TrackLink]     = deriveDecoder
   implicit val sadd: Decoder[r.SimpleAlbum]  = deriveDecoder
   implicit val plrd: Decoder[r.Playlist]     = deriveDecoder
+  implicit val plsd: Decoder[r.Playlists]    = deriveDecoder
   implicit val urd: Decoder[r.User]          = deriveDecoder
   implicit val srd: Decoder[r.SearchResults] = deriveDecoder
-
+  implicit val sid: Decoder[r.SharedImage]   = deriveDecoder
+  implicit val cad: Decoder[r.Category]      = deriveDecoder
+  implicit val cpp: Decoder[CategoryPage]    = deriveDecoder
+  implicit val csd: Decoder[r.Categories]    = deriveDecoder
 }

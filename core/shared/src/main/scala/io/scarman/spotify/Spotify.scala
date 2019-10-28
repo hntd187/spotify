@@ -4,7 +4,7 @@ package spotify
 import com.softwaremill.sttp._
 import io.scarman.spotify.auth.ClientCredentials
 import io.scarman.spotify.http.Authorization
-import io.scarman.spotify.request.{BaseAlbumType, Search}
+import io.scarman.spotify.request.{BaseAlbumType, Categories, CategoryPlaylists, Search}
 import scribe.Logging
 
 import scala.concurrent.{ExecutionContext, Future}
@@ -28,6 +28,12 @@ class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future,
   def getTracks(ids: String*): Tracks             = getTracks(ids.toList)
   def getAudioFeatures(id: String): AudioFeatures = AudioFeatures(id)(auth, backend)
   def getAudioAnalysis(id: String): AudioAnalysis = AudioAnalysis(id)(auth, backend)
+  def getCategories(country: Option[String] = None, locale: Option[String] = None, limit: Int = 20, offset: Int = 0): Categories =
+    Categories(country, locale, limit, offset)(auth, backend)
+  def getCategory(categoryId: String, country: Option[String] = None, locale: Option[String] = None): Category =
+    Category(categoryId, country, locale)(auth, backend)
+  def getCategoryPlaylists(categoryId: String, country: Option[String] = None, limit: Int = 20, offset: Int = 0): CategoryPlaylists =
+    CategoryPlaylists(categoryId, country, limit, offset)(auth, backend)
 
   def search(q: String,
              cat: String,
