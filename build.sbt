@@ -68,6 +68,8 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
     scalaVersion := "2.12.9",
   )
 
+// Run the example project by running `sbt startWorkbenchServer` and navigating to
+// http://localhost:8888/index-dev.html
 lazy val example = project
   .in(file("example-scalajs-app"))
   .settings(common)
@@ -83,7 +85,10 @@ lazy val example = project
       "com.lihaoyi" %%% "scalatags" % "0.7.0"
     ),
     test in Test := {},
-    artifactPath in (Compile, fastOptJS) := file("C:\\Users\\Stephen Carman\\software\\nginx-1.15.9\\html\\app-example.js")
+    // Workbench config
+    localUrl := ("localhost", 8080),
+    workbenchDefaultRootObject := Some(("example-scalajs-app/", "example-scalajs-app/")),
+    workbenchStartMode := WorkbenchStartModes.Manual
   )
-  .enablePlugins(ScalaJSPlugin)
+  .enablePlugins(ScalaJSPlugin, WorkbenchPlugin)
   .dependsOn(core.js)
