@@ -10,8 +10,8 @@ scala:
    - 2.13.0
 
 jdk:
-  - oraclejdk8
-  - oraclejdk12
+  - openjdk8
+  - openjdk12
 
 env: SJS_TEST_BROWSER=chrome
 
