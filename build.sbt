@@ -82,7 +82,7 @@ lazy val example = project
     mainClass in Compile := Some("io.scarman.spotify.ExampleApp"),
     resolvers += Resolver.jcenterRepo,
     libraryDependencies ++= Seq(
-      "com.lihaoyi" %%% "scalatags" % "0.7.0"
+      "com.lihaoyi" %%% "scalatags" % "0.8.1"
     ),
     test in Test := {},
     // Workbench config
