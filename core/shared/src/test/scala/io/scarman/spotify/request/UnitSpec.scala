@@ -8,6 +8,8 @@ import org.scalatest.time._
 import io.scarman.spotify.request.PlatformSpec._
 
 import scala.concurrent.ExecutionContext
+import org.scalatest.funspec.AsyncFunSpec
+import org.scalatest.matchers.should.Matchers
 
 object UnitSpec {}
 
