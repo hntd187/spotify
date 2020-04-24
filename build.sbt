@@ -59,7 +59,7 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
       "io.circe"              %%% "circe-parser"                    % circeVersion,
       "io.circe"              %%% "circe-generic"                   % circeVersion,
       "org.scalatest"         %%% "scalatest"                       % scalatestVersion % Test,
-      "io.github.cquiroz"     %%% "scala-java-time"                 % "2.0.0-RC3"
+      "io.github.cquiroz"     %%% "scala-java-time"                 % "2.0.0"
     )
   )
   .jsSettings(browserTestSettings)
