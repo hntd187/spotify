@@ -1,12 +1,10 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp.{SttpBackend, UriContext}
 import io.scarman.spotify.http.{Authorization, HttpRequest}
 import io.scarman.spotify.request.TimeRange.MediumTerm
 import io.scarman.spotify.response
 import io.scarman.spotify.response.Paging
-
-import scala.concurrent.Future
+import sttp.client._
 
 /**
   * @see https://developer.spotify.com/documentation/web-api/reference/personalization/get
@@ -21,11 +19,11 @@ import scala.concurrent.Future
   * @param timeRange Over what time frame the affinities are computed.
   */
 case class UsersTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = MediumTerm)(implicit auth: Authorization,
-                                                                                                backend: SttpBackend[Future, Nothing])
+                                                                                                backend: Backend)
     extends HttpRequest[Paging[response.Artist]] {
 
   lazy protected val reqUri = uri"$base/me/top/tracks"
-    .param("limit", limit.toString)
-    .param("offset", offset.toString)
+    .param("limit", limit.toString())
+    .param("offset", offset.toString())
     .param("time_range", timeRange.name)
 }

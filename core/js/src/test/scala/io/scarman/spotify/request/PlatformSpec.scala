@@ -1,10 +1,10 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp._
+import sttp.client.FetchBackend
 
 import scala.concurrent.ExecutionContext
 
 object PlatformSpec {
-  implicit val executionContext = ExecutionContext.Implicits.global
-  implicit val backend          = FetchBackend()
+  implicit def executionContext: ExecutionContext = ExecutionContext.Implicits.global
+  implicit val backend: Backend                   = FetchBackend()
 }

@@ -1,14 +1,13 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp.{SttpBackend, UriContext, Uri}
 import io.scarman.spotify.http.{Authorization, HttpRequest}
 import io.scarman.spotify.response.{Category => CategoryResp}
-
-import scala.concurrent.Future
+import sttp.client._
+import sttp.model.Uri
 
 case class Category(categoryId: String, country: Option[String] = None, locale: Option[String] = None)(
     implicit auth: Authorization,
-    backend: SttpBackend[Future, Nothing]
+    backend: Backend
 ) extends HttpRequest[CategoryResp] {
 
   lazy protected val reqUri: Uri =

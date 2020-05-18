@@ -1,10 +1,8 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp._
 import io.scarman.spotify._
 import io.scarman.spotify.http.{Authorization, HttpRequest}
-
-import scala.concurrent.Future
+import sttp.client._
 
 /**
   * A artist (such as Mr. Worldwide)
@@ -14,8 +12,7 @@ import scala.concurrent.Future
   * @param market
   * @param spotify
   */
-case class Artist(id: String, market: String = "ES")(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
-    extends HttpRequest[response.Artist] {
+case class Artist(id: String, market: String = "ES")(implicit auth: Authorization, backend: Backend) extends HttpRequest[response.Artist] {
 
   lazy protected val reqUri = uri"$base$AR/$id"
 

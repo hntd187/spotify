@@ -4,8 +4,6 @@ import scala.concurrent.duration.Duration
 
 class AudioSpec extends UnitSpec {
 
-  import UnitSpec._
-
   describe("Tests for Audio Features and Analysis Endpoints") {
     it("Should get some sweet audio features from Mr. Worldwide") {
 

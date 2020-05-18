@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit
 import com.softwaremill.sttp._
 import io.scarman.spotify.auth._
 import io.scarman.spotify.http.Authorization
-import io.scarman.spotify.request.Search
+import io.scarman.spotify.request.{Me, Search}
 import org.scalajs.dom._
 import org.scalajs.dom.html._
 import scalatags.JsDom._
@@ -56,7 +56,16 @@ object ExampleApp {
       div(`class` := "card-body", h5(`class` := "card-title", album.name), "By: ", album.artists.map(_.name).mkString(", ")),
       ul(`class`  := "list-group list-group-flush", for (track <- album.tracks.items) yield createItem(track))
     )
-    div(artwork, tracks)
+    div(artwork, tracks, div(`class` := "mb-3 w-25 mx-auto", id := "foot"))
+  }
+
+  def me(): Future[String] = {
+    val m = Me().currentlyPlaying()
+    m().map(_.item.album.get.id).recover {
+      case e =>
+        println(e.getMessage)
+        schpoopy_mastodon_album
+    }
   }
 
   @JSExportTopLevel("reqAlbum")
@@ -128,6 +137,7 @@ object ExampleApp {
     if (!AuthorizationCode.parseUrl(window.location.href).contains("access_token")) {
       window.location.replace(auth.authUrl())
     }
-    reqAlbum("body", schpoopy_mastodon_album)
+
+    me().flatMap(id => reqAlbum("body", id))
   }
 }

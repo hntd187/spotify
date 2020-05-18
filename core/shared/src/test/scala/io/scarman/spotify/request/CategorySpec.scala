@@ -1,7 +1,5 @@
 package io.scarman.spotify.request
 
-import PlatformSpec._
-
 class CategorySpec extends UnitSpec {
 
   describe("Test browse categories") {
