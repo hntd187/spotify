@@ -10,7 +10,7 @@ case class User(
     href: String,
     id: String,
     images: Option[List[SharedImage]],
-    `type`: String,
+    tpe: String,
     uri: String
 )
 
@@ -27,6 +27,6 @@ case class PrivateUser(
     href: String,
     id: String,
     images: Option[List[SharedImage]],
-    `type`: String,
+    tpe: String,
     uri: String
 )

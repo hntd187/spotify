@@ -43,15 +43,17 @@ object AuthorizationCode {
   def parseUrl(url: String): Map[String, String] = {
     // Access token is a hash fragment
     val split = url.split('#')
-    if (split.length <= 1) return Map.empty
-
-    split.lastOption
-      .map(_.split('&').map { u =>
-        u.split('=') match {
-          case Array(k, v) => k -> v
-        }
-      }.toMap)
-      .getOrElse(Map.empty)
+    if (split.length <= 1)
+      Map.empty
+    else {
+      split.lastOption
+        .map(_.split('&').map { u =>
+          u.split('=') match {
+            case Array(k, v) => k -> v
+          }
+        }.toMap)
+        .getOrElse(Map.empty)
+    }
   }
 }
 

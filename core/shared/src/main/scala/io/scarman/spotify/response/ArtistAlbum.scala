@@ -7,5 +7,5 @@ case class ArtistAlbum(album_type: String,
                        id: String,
                        images: List[Image],
                        name: String,
-                       `type`: String,
+                       tpe: String,
                        uri: String)

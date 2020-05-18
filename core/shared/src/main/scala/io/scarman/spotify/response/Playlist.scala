@@ -10,5 +10,5 @@ case class Playlist(collaborative: Boolean,
                     public: Option[Boolean],
                     snapshot_id: String,
                     tracks: TracksRef,
-                    `type`: String,
+                    tpe: String,
                     uri: String)

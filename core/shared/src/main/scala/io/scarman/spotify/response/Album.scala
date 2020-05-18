@@ -19,7 +19,7 @@ case class Album(album_type: String,
                  release_date_precision: String,
                  linked_from: Option[ExternalUrl],
                  tracks: TrackPage,
-                 `type`: String,
+                 tpe: String,
                  uri: String)
 
 case class SimpleAlbum(album_type: String,
@@ -29,5 +29,5 @@ case class SimpleAlbum(album_type: String,
                        id: String,
                        images: List[Image],
                        name: String,
-                       `type`: String,
+                       tpe: String,
                        uri: String)

@@ -8,7 +8,7 @@ class ArtistSpec extends UnitSpec {
       val response = request()
       response.map { r =>
         r.name shouldBe "Pitbull"
-        r.`type` shouldBe "artist"
+        r.tpe shouldBe "artist"
         r.popularity.get shouldBe (89 +- 5)
       }
       val topTracks = request.topTracks()
