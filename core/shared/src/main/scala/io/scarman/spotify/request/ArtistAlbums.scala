@@ -1,9 +1,7 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp._
 import io.scarman.spotify.http._
-
-import scala.concurrent.Future
+import sttp.client._
 
 /**
   * The albums belonging to an artist.
@@ -22,14 +20,14 @@ import scala.concurrent.Future
   */
 case class ArtistAlbums(id: String, market: String, types: List[BaseAlbumType] = AlbumTypes.default, limit: Int = 10, offset: Int = 0)(
     implicit auth: Authorization,
-    val backend: SttpBackend[Future, Nothing]
+    val backend: Backend
 ) extends HttpRequest[AlbumPage] {
 
   lazy protected val reqUri =
     uri"$base$AR/$id/albums"
       .param("album_type", types.mkString(","))
-      .param("limit", limit.toString)
-      .param("offset", offset.toString)
+      .param("limit", limit.toString())
+      .param("offset", offset.toString())
       .param("market", market)
 
 }

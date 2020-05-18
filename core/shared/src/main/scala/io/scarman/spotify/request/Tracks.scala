@@ -1,10 +1,8 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp._
 import io.scarman.spotify._
 import io.scarman.spotify.http.{Authorization, HttpRequest}
-
-import scala.concurrent.Future
+import sttp.client._
 
 /**
   * Get multiple tracks at once.
@@ -14,7 +12,7 @@ import scala.concurrent.Future
   * @param market
   * @param spotify
   */
-case class Tracks(id: List[String], market: String = "ES")(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
+case class Tracks(id: List[String], market: String = "ES")(implicit auth: Authorization, backend: Backend)
     extends HttpRequest[response.Tracks] {
 
   lazy protected val reqUri = uri"$base$TR"

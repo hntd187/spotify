@@ -9,7 +9,7 @@ import scala.scalajs.js.annotation.JSExportTopLevel
 object Audio {
 
   @JSExportTopLevel("pauseSound")
-  def pauseSound(ele: String) = {
+  def pauseSound(ele: String): Unit = {
     val element  = document.getElementById(ele)
     val audioTag = document.getElementById(s"$ele-track").asInstanceOf[HTMLAudioElement]
     audioTag.pause()
@@ -17,7 +17,7 @@ object Audio {
   }
 
   @JSExportTopLevel("playExistingSound")
-  def playExistingSound(ele: String) = {
+  def playExistingSound(ele: String): Unit = {
     val element  = document.getElementById(ele)
     val audioTag = document.getElementById(s"$ele-track").asInstanceOf[HTMLAudioElement]
     audioTag.onended = (_: Event) => { pauseSound(ele) }
@@ -30,7 +30,7 @@ object Audio {
   }
 
   @JSExportTopLevel("playSound")
-  def playSound(ele: String, url: String) = {
+  def playSound(ele: String, url: String): Unit = {
     val a       = audio(src := url, id := s"$ele-track").render
     val element = document.getElementById(ele)
     element.insertAdjacentHTML("afterend", a)

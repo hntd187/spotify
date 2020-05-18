@@ -1,7 +1,5 @@
 package io.scarman.spotify.request
 
-import PlatformSpec._
-
 class ArtistSpec extends UnitSpec {
 
   describe("Tests for Artist Endpoints") {
@@ -38,7 +36,7 @@ class ArtistSpec extends UnitSpec {
       val aa           = artistAlbums()
       val np           = aa.flatMap(_.nextPage())
       for { f <- np } {
-        f.total shouldBe 30
+        f.total shouldBe 29
       }
 
       aa.map { a =>

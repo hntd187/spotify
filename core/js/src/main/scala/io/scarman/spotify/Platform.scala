@@ -1,12 +1,8 @@
 package io.scarman.spotify
 
-import scalajs.js.Date
-
-import com.softwaremill.sttp.FetchBackend
+import scala.scalajs.js.Date
 
 object Platform {
-
-  implicit val backend = FetchBackend()
 
   def after(d: Long): Boolean = {
     val dd = new Date()

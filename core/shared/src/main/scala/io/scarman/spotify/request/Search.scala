@@ -1,10 +1,8 @@
 package io.scarman.spotify
 package request
 
-import com.softwaremill.sttp._
 import io.scarman.spotify.http.{Authorization, HttpRequest}
-
-import scala.concurrent.Future
+import sttp.client._
 
 /**
   * It's best to view the documentation here to know what queries are valid for searching.
@@ -23,14 +21,14 @@ case class Search(q: String,
                   market: String                   = "US",
                   limit: Int                       = 20,
                   offset: Int                      = 0,
-                  include_external: Option[String] = None)(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
+                  include_external: Option[String] = None)(implicit auth: Authorization, backend: Backend)
     extends HttpRequest[response.SearchResults] {
 
   lazy val reqUri = uri"${base}search"
     .param("market", market)
     .param("q", q)
     .param("type", `type`)
-    .param("limit", limit.toString)
-    .param("offset", offset.toString)
+    .param("limit", limit.toString())
+    .param("offset", offset.toString())
 
 }

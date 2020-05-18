@@ -1,14 +1,13 @@
 package io.scarman
 package spotify
 
-import com.softwaremill.sttp._
 import io.scarman.spotify.auth.ClientCredentials
 import io.scarman.spotify.http.Authorization
-import io.scarman.spotify.request.{BaseAlbumType, Categories, CategoryPlaylists, Search, TimeRange}
 import io.scarman.spotify.request.TimeRange.MediumTerm
+import io.scarman.spotify.request.{BaseAlbumType, Categories, CategoryPlaylists, Search, Backend, TimeRange}
 import scribe.Logging
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 /**
   * The main entrance point into the Spotify API. This is required for all API calls, but most times it's
@@ -17,8 +16,7 @@ import scala.concurrent.{ExecutionContext, Future}
   *
   * @param auth
   */
-class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future, Nothing],
-                                       val execution: ExecutionContext = ExecutionContext.Implicits.global)
+class Spotify(val auth: Authorization)(implicit val backend: Backend, val execution: ExecutionContext = ExecutionContext.Implicits.global)
     extends Logging {
 
   def getArtist(id: String, market: String = "US"): Artist = Artist(id, market)(auth, backend)
@@ -75,12 +73,11 @@ class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future,
 }
 
 object Spotify {
-  def apply(id: String, secret: String)(implicit backend: SttpBackend[Future, Nothing], execution: ExecutionContext): Spotify = {
+  def apply(id: String, secret: String)(implicit backend: Backend, execution: ExecutionContext): Spotify = {
     apply(ClientCredentials(id, secret))
   }
 
-  def apply(auth: Authorization)(implicit backend: SttpBackend[Future, Nothing],
-                                 execution: ExecutionContext = ExecutionContext.Implicits.global): Spotify = {
+  def apply(auth: Authorization)(implicit backend: Backend, execution: ExecutionContext = ExecutionContext.Implicits.global): Spotify = {
     new Spotify(auth)
   }
 }

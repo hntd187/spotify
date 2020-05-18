@@ -1,10 +1,8 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp._
 import io.scarman.spotify._
 import io.scarman.spotify.http.{Authorization, HttpRequest}
-
-import scala.concurrent.Future
+import sttp.client._
 
 /**
   * Get some interesting metadata about a specific track
@@ -13,7 +11,6 @@ import scala.concurrent.Future
   * @param id
   * @param spotify
   */
-case class AudioFeatures(id: String)(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
-    extends HttpRequest[response.AudioFeatures] {
+case class AudioFeatures(id: String)(implicit auth: Authorization, backend: Backend) extends HttpRequest[response.AudioFeatures] {
   lazy protected val reqUri = uri"$base$AF/$id"
 }
