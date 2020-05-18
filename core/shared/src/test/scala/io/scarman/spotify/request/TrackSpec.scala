@@ -1,8 +1,6 @@
 package io.scarman.spotify.request
 
 import io.scarman.spotify.response.SimpleAlbum
-import org.scalatest.concurrent.ScalaFutures
-
 import scala.concurrent.duration.Duration
 
 class TrackSpec extends UnitSpec {

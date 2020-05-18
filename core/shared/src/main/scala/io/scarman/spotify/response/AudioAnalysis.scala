@@ -9,12 +9,12 @@ case class Beat(start: Double, duration: Double, confidence: Double) extends Tra
 case class Meta(analyzer_version: String,
                 platform: String,
                 detailed_status: String,
-                status_code: Int,
+                status_code: Option[Int],
                 timestamp: Long,
                 analysis_time: Double,
                 input_process: String)
 
-case class Section(start: Double,
+case class Section(start: Option[Double],
                    duration: Double,
                    confidence: Double,
                    loudness: Double,
@@ -22,30 +22,28 @@ case class Section(start: Double,
                    tempo_confidence: Double,
                    key: Int,
                    key_confidence: Double,
-                   mode: Int,
+                   mode: Option[Int],
                    mode_confidence: Double,
                    time_signature: Int,
                    time_signature_confidence: Double)
-    extends TrackDuration
 
-case class Segment(start: Double,
+case class Segment(start: Option[Double],
                    duration: Double,
-                   confidence: Double,
+                   confidence: Option[Double],
                    loudness_start: Double,
-                   loudness_max_time: Double,
+                   loudness_max_time: Option[Double],
                    loudness_max: Double,
                    loudness_end: Option[Int],
                    pitches: List[Double],
                    timbre: List[Double])
-    extends TrackDuration
 
 case class Tatum(start: Double, duration: Double, confidence: Double) extends TrackDuration
 
 case class AnalysisTrack(num_samples: Option[Int],
                          duration: Double,
-                         sample_md5: String,
-                         offset_seconds: Int,
-                         window_seconds: Int,
+                         sample_md5: Option[String],
+                         offset_seconds: Option[Int],
+                         window_seconds: Option[Int],
                          analysis_sample_rate: Int,
                          analysis_channels: Int,
                          end_of_fade_in: Double,

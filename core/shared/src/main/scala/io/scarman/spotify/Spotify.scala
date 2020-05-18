@@ -1,13 +1,13 @@
 package io.scarman
 package spotify
 
-import com.softwaremill.sttp._
 import io.scarman.spotify.auth.ClientCredentials
 import io.scarman.spotify.http.Authorization
-import io.scarman.spotify.request.{BaseAlbumType, Search}
+import io.scarman.spotify.request.TimeRange.MediumTerm
+import io.scarman.spotify.request.{BaseAlbumType, Categories, CategoryPlaylists, Search, Backend, TimeRange}
 import scribe.Logging
 
-import scala.concurrent.{ExecutionContext, Future}
+import scala.concurrent.ExecutionContext
 
 /**
   * The main entrance point into the Spotify API. This is required for all API calls, but most times it's
@@ -16,8 +16,7 @@ import scala.concurrent.{ExecutionContext, Future}
   *
   * @param auth
   */
-class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future, Nothing],
-                                       val execution: ExecutionContext = ExecutionContext.Implicits.global)
+class Spotify(val auth: Authorization)(implicit val backend: Backend, val execution: ExecutionContext = ExecutionContext.Implicits.global)
     extends Logging {
 
   def getArtist(id: String, market: String = "US"): Artist = Artist(id, market)(auth, backend)
@@ -28,6 +27,16 @@ class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future,
   def getTracks(ids: String*): Tracks             = getTracks(ids.toList)
   def getAudioFeatures(id: String): AudioFeatures = AudioFeatures(id)(auth, backend)
   def getAudioAnalysis(id: String): AudioAnalysis = AudioAnalysis(id)(auth, backend)
+  def getCategories(country: Option[String] = None, locale: Option[String] = None, limit: Int = 20, offset: Int = 0): Categories =
+    Categories(country, locale, limit, offset)(auth, backend)
+  def getCategory(categoryId: String, country: Option[String] = None, locale: Option[String] = None): Category =
+    Category(categoryId, country, locale)(auth, backend)
+  def getCategoryPlaylists(categoryId: String, country: Option[String] = None, limit: Int = 20, offset: Int = 0): CategoryPlaylists =
+    CategoryPlaylists(categoryId, country, limit, offset)(auth, backend)
+  def getUsersTopTracks(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = MediumTerm): UsersTopTracks =
+    UsersTopTracks(limit, offset, timeRange)(auth, backend)
+  def getUsersTopArtists(limit: Int = 20, offset: Int = 0, timeRange: TimeRange = MediumTerm): UsersTopArtists =
+    UsersTopArtists(limit, offset, timeRange)(auth, backend)
 
   def search(q: String,
              cat: String,
@@ -64,12 +73,11 @@ class Spotify(val auth: Authorization)(implicit val backend: SttpBackend[Future,
 }
 
 object Spotify {
-  def apply(id: String, secret: String)(implicit backend: SttpBackend[Future, Nothing], execution: ExecutionContext): Spotify = {
+  def apply(id: String, secret: String)(implicit backend: Backend, execution: ExecutionContext): Spotify = {
     apply(ClientCredentials(id, secret))
   }
 
-  def apply(auth: Authorization)(implicit backend: SttpBackend[Future, Nothing],
-                                 execution: ExecutionContext = ExecutionContext.Implicits.global): Spotify = {
+  def apply(auth: Authorization)(implicit backend: Backend, execution: ExecutionContext = ExecutionContext.Implicits.global): Spotify = {
     new Spotify(auth)
   }
 }

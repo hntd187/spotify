@@ -1,10 +1,8 @@
 package io.scarman.spotify.request
 
-import com.softwaremill.sttp._
 import io.scarman.spotify._
 import io.scarman.spotify.http.{Authorization, HttpRequest}
-
-import scala.concurrent.Future
+import sttp.client._
 
 /**
   * Get more than one artist at once.
@@ -15,10 +13,10 @@ import scala.concurrent.Future
   * @param offset
   * @param spotify
   */
-case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit auth: Authorization, backend: SttpBackend[Future, Nothing])
+case class Artists(ids: List[String], limit: Int = 10, offset: Int = 5)(implicit auth: Authorization, backend: Backend)
     extends HttpRequest[response.Artists] {
 
   lazy protected val reqUri = uri"$base$AR/?ids=$ids"
-    .param("limit", limit.toString)
-    .param("offset", offset.toString)
+    .param("limit", limit.toString())
+    .param("offset", offset.toString())
 }

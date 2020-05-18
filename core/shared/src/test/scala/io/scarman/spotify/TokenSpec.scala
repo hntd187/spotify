@@ -1,8 +1,8 @@
 package io.scarman.spotify
-import io.scarman.spotify.auth.ClientCredentials
+
 import io.scarman.spotify.request.UnitSpec
 import io.scarman.spotify.response.AccessToken
-import io.scarman.spotify.request.PlatformSpec._
+//import io.scarman.spotify.request.PlatformSpec._
 
 class TokenSpec extends UnitSpec {
 
@@ -16,8 +16,8 @@ class TokenSpec extends UnitSpec {
     it("Should refresh the token...") {
       val t = auth.getToken
 
-      t.flatMap { tok =>
-        val bumToken = AccessToken.expired
+      t.flatMap { _ =>
+        val _ = AccessToken.expired
         auth.refreshToken()
       }
 

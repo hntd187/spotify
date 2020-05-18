@@ -1,7 +1,5 @@
 package io.scarman.spotify.request
 
-import PlatformSpec._
-
 class ArtistSpec extends UnitSpec {
 
   describe("Tests for Artist Endpoints") {
