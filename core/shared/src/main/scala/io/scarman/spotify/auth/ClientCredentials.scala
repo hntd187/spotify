@@ -39,7 +39,9 @@ case class ClientCredentials(appId: String, appSecret: String)(implicit backend:
   protected def initToken(id: String, secret: String): Future[AccessToken] = {
     info(s"$id - $secret")
     val request = baseRequest.auth.basic(id, secret)
-//    debug(s"Headers: ${request.headers.map { case (k, v) => s"$k=$v" }.mkString(", ")}")
+    debug(s"Headers: ${request.headers.map { h =>
+      s"${h.name}=${h.value}"
+    }.mkString(", ")}")
     tokenRequest(request)
   }
 

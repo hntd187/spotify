@@ -2,15 +2,16 @@ import org.openqa.selenium.chrome.ChromeOptions
 import org.scalajs.jsenv.selenium.SeleniumJSEnv
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
-lazy val scalalibraryVersion = "2.13.2"
-lazy val scalatestVersion    = "3.1.2"
-lazy val sttpVersion         = "2.1.1"
+lazy val scalalibraryVersion = "2.13.3"
+lazy val scalatestVersion    = "3.2.1"
+lazy val sttpVersion         = "2.2.5"
 lazy val circeVersion        = "0.13.0"
 lazy val scribeVersion       = "2.7.12"
 
 scalaVersion                  := scalalibraryVersion
 releaseIgnoreUntrackedFiles   := true
 ThisBuild / turbo             := true
+Global / onChangedBuildSource := ReloadOnSourceChanges
 
 lazy val browserTestSettings = Seq(
   jsEnv in Test := {
@@ -48,7 +49,7 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
   .in(file("core"))
   .settings(common)
   .settings(
-    scalaVersion := "2.13.2",
+    scalaVersion := scalalibraryVersion,
     crossScalaVersions ++= Seq("2.13.2", "2.12.11"),
     libraryDependencies ++= Seq(
       "com.softwaremill.sttp.client" %%% "core"                            % sttpVersion,
@@ -66,7 +67,7 @@ lazy val core = crossProject(JVMPlatform, JSPlatform)
   .jsSettings(browserTestSettings)
   .jsSettings(
     coverageEnabled := false,
-    scalaVersion    := "2.13.2"
+    scalaVersion    := scalalibraryVersion
   )
 
 lazy val example = project
@@ -74,7 +75,7 @@ lazy val example = project
   .settings(common)
   .settings(
     name                            := "example-app",
-    scalaVersion                    := "2.13.2",
+    scalaVersion                    := scalalibraryVersion,
     scalaJSUseMainModuleInitializer := true,
     scalacOptions += "-P:scalajs:sjsDefinedByDefault",
     scalaJSLinkerConfig ~= { _.withESFeatures(_.withUseECMAScript2015(true)) },
