@@ -4,7 +4,7 @@ import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 lazy val scalalibraryVersion = "2.13.3"
 lazy val scalatestVersion    = "3.2.1"
-lazy val sttpVersion         = "2.2.5"
+lazy val sttpVersion         = "2.2.9"
 lazy val circeVersion        = "0.13.0"
 lazy val scribeVersion       = "2.7.12"
 
