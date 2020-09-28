@@ -1,4 +1,4 @@
-libraryDependencies += "org.scala-js" %% "scalajs-env-selenium" % "1.0.0"
+libraryDependencies += "org.scala-js" %% "scalajs-env-selenium" % "1.1.0"
 
 addSbtPlugin("com.timushev.sbt"    % "sbt-updates"              % "0.5.1")
 addSbtPlugin("org.scoverage"       % "sbt-scoverage"            % "1.6.1")
