@@ -3,15 +3,18 @@ import org.scalajs.jsenv.selenium.SeleniumJSEnv
 import sbtcrossproject.CrossPlugin.autoImport.{CrossType, crossProject}
 
 lazy val scalalibraryVersion = "2.13.3"
-lazy val scalatestVersion    = "3.2.1"
-lazy val sttpVersion         = "2.2.5"
+lazy val scalatestVersion    = "3.2.2"
+lazy val sttpVersion         = "2.2.9"
 lazy val circeVersion        = "0.13.0"
-lazy val scribeVersion       = "2.7.12"
+lazy val scribeVersion       = "2.8.3"
 
 scalaVersion                  := scalalibraryVersion
-releaseIgnoreUntrackedFiles   := true
 ThisBuild / turbo             := true
+publish / skip                := true
 Global / onChangedBuildSource := ReloadOnSourceChanges
+ThisBuild / githubOwner       := "hntd187"
+ThisBuild / githubRepository  := "spotify"
+ThisBuild / githubTokenSource := TokenSource.GitConfig("github.token")
 
 lazy val browserTestSettings = Seq(
   jsEnv in Test := {
@@ -29,8 +32,7 @@ lazy val common = Seq(
   scalafmtOnCompile in ThisBuild := true,
   parallelExecution in Test      := false,
   licenses += ("Apache-2.0", url("https://www.apache.org/licenses/LICENSE-2.0.html")),
-  homepage             := Some(url("https://www.github.com/hntd187/spotify")),
-  bintrayPackageLabels := Seq("spotify", "music"),
+  homepage := Some(url("https://www.github.com/hntd187/spotify")),
   scalacOptions ++= Seq(
     "-feature",
     "-encoding",
@@ -74,17 +76,16 @@ lazy val example = project
   .in(file("example-scalajs-app"))
   .settings(common)
   .settings(
-    name                            := "example-app",
-    scalaVersion                    := scalalibraryVersion,
-    scalaJSUseMainModuleInitializer := true,
+    name         := "example-app",
+    scalaVersion := scalalibraryVersion,
     scalacOptions += "-P:scalajs:sjsDefinedByDefault",
-    scalaJSLinkerConfig ~= { _.withESFeatures(_.withUseECMAScript2015(true)) },
     mainClass in Compile := Some("io.scarman.spotify.ExampleApp"),
     resolvers += Resolver.jcenterRepo,
     libraryDependencies ++= Seq(
       "com.lihaoyi" %%% "scalatags" % "0.9.1"
     ),
-    test in Test := {}
+    publish / skip := true,
+    test in Test   := {}
 //    Disabled for now until updated
 //    localUrl := ("localhost", 8080),
 //    workbenchDefaultRootObject := Some(("example-scalajs-app/", "example-scalajs-app/")),
