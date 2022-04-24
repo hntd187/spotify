@@ -1,13 +1,16 @@
 package io.scarman.spotify.request
 
 import io.scarman.spotify.http.{Authorization, HttpRequest}
-import io.scarman.spotify.response.{Categories => CategoriesResp}
-import sttp.client._
-import sttp.model._
+import io.scarman.spotify.response.Categories as CategoriesResp
+import sttp.client3.*
+import sttp.model.*
 
-case class Categories(country: Option[String] = None, locale: Option[String] = None, limit: Int = 20, offset: Int = 0)(
-    implicit auth: Authorization,
-    backend: Backend
+import scala.concurrent.ExecutionContext
+
+case class Categories(country: Option[String] = None, locale: Option[String] = None, limit: Int = 20, offset: Int = 0)(implicit
+    auth: Authorization,
+    backend: Backend,
+    ec: ExecutionContext
 ) extends HttpRequest[CategoriesResp] {
 
   lazy val parameters: Map[String, Any] = Map(
@@ -16,5 +19,5 @@ case class Categories(country: Option[String] = None, locale: Option[String] = N
     "limit"   -> limit,
     "offset"  -> offset
   )
-  protected lazy val reqUri: Uri = uri"$base/browse/categories?$parameters"
+  protected lazy val reqUri: Uri        = uri"$base/browse/categories?$parameters"
 }

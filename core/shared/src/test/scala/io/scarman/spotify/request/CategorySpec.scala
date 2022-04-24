@@ -50,7 +50,7 @@ class CategorySpec extends UnitSpec {
         // paging
         assert(r.playlists.href != null)
         assert(r.playlists.total >= r.playlists.items.length)
-        assert(r.playlists.items.head.tpe == "playlist")
+        assert(r.playlists.items.head.`type` == "playlist")
       }
     }
   }

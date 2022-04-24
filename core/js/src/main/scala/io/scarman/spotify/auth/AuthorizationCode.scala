@@ -2,11 +2,11 @@ package io.scarman.spotify.auth
 
 import java.util.concurrent.atomic.AtomicReference
 
-import sttp.client._
-import sttp.model._
-import io.circe.syntax._
+import sttp.client3.*
+import sttp.model.*
+import io.circe.syntax.*
 import io.scarman.spotify.http.Authorization
-import io.scarman.spotify.request._
+import io.scarman.spotify.request.*
 import io.scarman.spotify.response.AccessToken
 import org.scalajs.dom.window
 

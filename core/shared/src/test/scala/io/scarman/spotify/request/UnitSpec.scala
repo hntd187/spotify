@@ -2,20 +2,18 @@ package io.scarman.spotify.request
 
 import io.scarman.spotify.Spotify
 import io.scarman.spotify.auth.ClientCredentials
-import io.scarman.spotify.request.PlatformSpec._
-import org.scalatest.concurrent._
-import org.scalatest.funspec._
-import org.scalatest.matchers.should._
-import org.scalatest.time._
+import io.scarman.spotify.request.PlatformSpec.*
+import org.scalatest.concurrent.*
+import org.scalatest.funspec.*
+import org.scalatest.matchers.should.*
+import org.scalatest.time.*
 import org.scalatest.{BeforeAndAfterAll, OptionValues}
 
 import scala.concurrent.ExecutionContext
 
-object UnitSpec {}
-
 trait UnitSpec extends AsyncFunSpec with Matchers with OptionValues with BeforeAndAfterAll with ScalaFutures {
 
-  implicit override def executionContext: ExecutionContext = ExecutionContext.Implicits.global
+  implicit override def executionContext: ExecutionContext = PlatformSpec.executionContext
 
   implicit val defaultPatience: PatienceConfig = PatienceConfig(timeout = Span(5, Seconds), interval = Span(1, Second))
 

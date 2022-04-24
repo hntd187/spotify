@@ -1,6 +1,6 @@
 package io.scarman.spotify.request
 
-import sttp.client.asynchttpclient.future.AsyncHttpClientFutureBackend
+import sttp.client3.asynchttpclient.future.AsyncHttpClientFutureBackend
 
 import scala.concurrent.ExecutionContext
 

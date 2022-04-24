@@ -2,15 +2,15 @@ package io.scarman.spotify
 
 import io.scarman.spotify.request.UnitSpec
 import io.scarman.spotify.response.AccessToken
-//import io.scarman.spotify.request.PlatformSpec._
+import io.scarman.spotify.request.PlatformSpec.*
 
 class TokenSpec extends UnitSpec {
 
   describe("Test getting auth tokens") {
 
     it("Should get a valid token...") {
-      auth.isExpired.map(_ shouldBe false)
-      auth.getToken.map(_.access_token should not be empty)
+      auth.isExpired.map(_ `shouldBe` false)
+      auth.getToken.map(_.access_token `should` not `be` empty)
     }
 
     it("Should refresh the token...") {
@@ -21,8 +21,8 @@ class TokenSpec extends UnitSpec {
         auth.refreshToken()
       }
 
-      auth.isExpired.map(_ shouldBe false)
-      auth.getToken.map(_.access_token should not be empty)
+      auth.isExpired.map(_ `shouldBe` false)
+      auth.getToken.map(_.access_token `should` not `be` empty)
     }
   }
 }

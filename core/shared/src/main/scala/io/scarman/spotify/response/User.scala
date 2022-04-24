@@ -1,7 +1,6 @@
 package io.scarman.spotify.response
 
-/**
-  * Note the Spotify "user" leaves out a few fields, thus the Option
+/** Note the Spotify "user" leaves out a few fields, thus the Option
   */
 case class User(
     display_name: String,
@@ -10,7 +9,7 @@ case class User(
     href: String,
     id: String,
     images: Option[List[SharedImage]],
-    tpe: String,
+    `type`: String,
     uri: String
 )
 
@@ -27,6 +26,6 @@ case class PrivateUser(
     href: String,
     id: String,
     images: Option[List[SharedImage]],
-    tpe: String,
+    `type`: String,
     uri: String
 )

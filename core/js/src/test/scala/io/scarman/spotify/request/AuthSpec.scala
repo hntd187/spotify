@@ -10,7 +10,7 @@ class AuthSpec extends UnitSpec {
       val _ = AuthorizationCode(appId, Scopes.All, "http://localhost:8080/callback")
 
 //      auth.authApp()
-      Future.unit.map(_ => 1 shouldBe 1)
+      Future.unit.map(_ => 1 `shouldBe` 1)
     }
   }
 

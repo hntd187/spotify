@@ -1,7 +1,7 @@
 package io.scarman.spotify.request
 
-import io.scarman.spotify.http._
-import io.scarman.spotify.request.PlatformSpec._
+import io.scarman.spotify.http.*
+import io.scarman.spotify.request.PlatformSpec.*
 import io.scarman.spotify.response.Image
 import scribe.Logging
 
@@ -16,8 +16,8 @@ class ImageSpec extends UnitSpec with Logging {
 
       val coverResult = images.flatMap(_.download())
       coverResult.map { cover =>
-        cover.checksum.nonEmpty shouldBe false
-        cover.result shouldBe Downloaded
+        cover.checksum.nonEmpty `shouldBe` false
+        cover.result `shouldBe` Downloaded
       }
     }
   }

@@ -8,7 +8,7 @@ class SearchSpec extends UnitSpec {
 
       s().map { sr =>
         println(sr.albums.value.items.length)
-        sr.albums.value.items should have length 10
+        sr.albums.value.items `should` have `length` 10
       }
     }
   }
