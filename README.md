@@ -1,15 +1,15 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ee0545610a234b4ba53c58f497efb6f8)](https://app.codacy.com/app/shcarman/spotify?utm_source=github.com&utm_medium=referral&utm_content=hntd187/spotify&utm_campaign=Badge_Grade_Settings)
-[ ![Download](https://api.bintray.com/packages/hntd187/maven/spotify-api/images/download.svg) ](https://bintray.com/hntd187/maven/spotify-api/_latestVersion)[![Travis](https://travis-ci.org/hntd187/spotify.svg?branch=master)](https://travis-ci.org/hntd187/spotify) [![Coverage Status](https://coveralls.io/repos/github/hntd187/spotify/badge.svg?branch=master)](https://coveralls.io/github/hntd187/spotify?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/hntd187/spotify/badge.svg?branch=master)](https://coveralls.io/github/hntd187/spotify?branch=master)
 
 A Scala library for the Spotify API. The documentation on the Spotify API can be found [here](https://developer.spotify.com/web-api). It currently
 supports most features surrounding artists, tracks, and albums. Currently no user support is implemented. 
 
 ##### Adding to project
-`libraryDependencies += "io.scarman" %% "spotify-api" % "0.2.0"` 
+`libraryDependencies += "io.scarman" %% "spotify-api" % "0.3.0"` 
 
 or if you are using scalaJS
 
-`libraryDependencies += "io.scarman" %%% "spotify-api" % "0.2.0"` 
+`libraryDependencies += "io.scarman" %%% "spotify-api" % "0.3.0"` 
 
 
 ##### Using the Library
@@ -23,8 +23,8 @@ No matter which way you use you must have an [sttp](https://github.com/softwarem
 backend implementing `Backend[Future[R], _]`, which is `AsyncHttpClientFutureBackend` for JVM usage or `FetchBackend` if you are using JS.
 ```scala
 import scala.concurrent.Future
-import io.scarman.spotify._
-import io.scarman.spotify.{response => resp}
+import io.scarman.spotify.*
+import io.scarman.spotify.{response as resp}
 import com.softwaremill.sttp.asynchttpclient.future.AsyncHttpClientFutureBackend
 
 val appId = ""
@@ -43,8 +43,8 @@ The second way uses the Spotify object implicitly and creates the case classes d
 
 ```scala
 import scala.concurrent.Future
-import io.scarman.spotify._
-import io.scarman.spotify.{response => resp}
+import io.scarman.spotify.*
+import io.scarman.spotify.{response as resp}
 import com.softwaremill.sttp.asynchttpclient.future.AsyncHttpClientFutureBackend
 
 val appId = ""
@@ -65,7 +65,7 @@ users responsibility to deal with the future at this point, but some of the resp
 make subsequent requests using information you've already provided much easier.
 
 ```scala
-import io.scarman.spotify._
+import io.scarman.spotify.*
 
 val artist = Artist("id")
 val albums = artist.albums()
